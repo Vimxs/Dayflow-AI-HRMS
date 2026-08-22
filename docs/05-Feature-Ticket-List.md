@@ -46,10 +46,10 @@
 **Acceptance:** Attendance scoping enforced per Security doc §2; correct status colors per Frontend Spec.
 
 ## Phase 5 — Leave & Time-Off Management
-- [ ] T5.1 Apply for Leave form (type, date range, remarks)
-- [ ] T5.2 Leave request list + status (Pending/Approved/Rejected) — employee view
-- [ ] T5.3 Admin Leave Approvals queue — approve/reject with comment
-- [ ] T5.4 Notification on status change (employee side)
+- [x] T5.1 Apply for Leave form (type, date range, remarks)
+- [x] T5.2 Leave request list + status (Pending/Approved/Rejected) — employee view
+- [x] T5.3 Admin Leave Approvals queue — approve/reject with comment
+- [x] T5.4 Notification on status change (employee side)
 
 **Acceptance:** Status changes reflect immediately; all approvals audit-logged.
 
