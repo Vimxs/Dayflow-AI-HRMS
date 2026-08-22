@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: validationResult.error.errors[0]?.message || "Invalid password or token.",
+          error: validationResult.error.issues[0]?.message || "Invalid password or token.",
         },
         { status: 400 }
       );

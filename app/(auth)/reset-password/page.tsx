@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { AuthCard } from "@/components/shared/auth-card";
@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { PasswordStrengthMeter } from "@/components/ui/password-strength-meter";
 import { Lock, CheckCircle2, AlertCircle, ArrowRight } from "lucide-react";
 
-export default function ResetPasswordPage() {
+function ResetPasswordContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
@@ -158,5 +158,13 @@ export default function ResetPasswordPage() {
         </Link>
       </div>
     </AuthCard>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="text-ink-muted text-sm">Loading…</div></div>}>
+      <ResetPasswordContent />
+    </Suspense>
   );
 }
