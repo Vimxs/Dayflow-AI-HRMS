@@ -14,7 +14,7 @@ import { createAuditLog } from "@/lib/audit/logger";
 import { checkRateLimit } from "@/lib/rate-limit";
 export async function POST(req: NextRequest) {
   try {
-    const ip = req.headers.get("x-forwarded-for") || req.ip || "127.0.0.1";
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0] || req.headers.get("x-real-ip") || "127.0.0.1";
     // We can't use email before parsing, so rate limit purely by IP for the entire sign-in endpoint for now,
     // or rate limit by IP + email if we parse first. Let's parse first.
     const body = await req.json().catch(() => ({}));
