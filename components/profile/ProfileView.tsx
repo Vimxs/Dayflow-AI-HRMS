@@ -70,12 +70,10 @@ export function ProfileView({ profile, currentUserRole, onProfileUpdated }: Prof
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-12">
       {/* ── Profile Hero Header ─────────────────────────── */}
-      <div className="glass-panel rounded-2xl p-6 md:p-8 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-primary-soft/50 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
-
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative z-10">
+      <div className="rounded-2xl p-6 md:p-8 bg-surface-muted border border-border">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="flex items-center gap-5">
-            <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-painted-header text-white flex items-center justify-center font-bold text-2xl md:text-3xl shadow-lg border-2 border-white/80 overflow-hidden flex-shrink-0">
+            <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-primary text-white flex items-center justify-center font-bold text-2xl md:text-3xl border-2 border-white overflow-hidden flex-shrink-0 shadow-xs">
               {profile.profilePictureUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={profile.profilePictureUrl} alt={fullName} className="w-full h-full object-cover" />
@@ -89,15 +87,15 @@ export function ProfileView({ profile, currentUserRole, onProfileUpdated }: Prof
 
             <div className="space-y-1">
               <div className="flex items-center gap-3">
-                <h1 className="text-2xl md:text-3xl font-extrabold text-ink tracking-tight">{fullName}</h1>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary-soft text-primary border border-primary/20">
+                <h1 className="text-2xl md:text-3xl font-heading font-extrabold text-ink tracking-tight">{fullName}</h1>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-primary-soft text-primary border border-primary/20">
                   <ShieldCheck className="w-3.5 h-3.5" />
                   {profile.role}
                 </span>
               </div>
               <p className="text-sm font-medium text-ink-secondary flex items-center gap-2">
                 <Briefcase className="w-4 h-4 text-primary" />
-                {profile.jobTitle} • <span className="text-primary font-semibold">{profile.department}</span>
+                {profile.jobTitle} • <span className="text-secondary font-bold">{profile.department}</span>
               </p>
               <p className="text-xs text-ink-muted flex items-center gap-3 pt-1">
                 <span>Code: <strong className="text-ink">{profile.employeeCode}</strong></span>

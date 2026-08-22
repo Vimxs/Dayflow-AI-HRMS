@@ -4,29 +4,29 @@ import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-btn text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98]",
+  "inline-flex items-center justify-center rounded-lg text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none active:scale-[0.99]",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-white shadow-sm shadow-primary/30 hover:bg-primary-hover active:bg-primary-dark",
+          "bg-primary text-white hover:bg-primary-dark shadow-xs",
         secondary:
-          "bg-primary-soft text-primary hover:bg-primary-soft/80 border border-primary/20",
+          "bg-white text-primary border border-primary hover:bg-primary-soft",
         outline:
-          "border border-border bg-white text-ink hover:bg-surface-muted hover:border-ink-light",
+          "border border-border bg-white text-ink hover:bg-surface-muted hover:border-primary/30",
         ghost:
-          "text-ink hover:bg-surface-muted hover:text-primary",
+          "text-ink hover:bg-primary-soft hover:text-primary",
         danger:
-          "bg-danger text-white shadow-sm shadow-danger/25 hover:bg-danger-hover",
+          "bg-danger text-white hover:bg-danger/90 shadow-xs",
         dangerOutline:
           "border border-danger/30 text-danger bg-danger-soft hover:bg-danger-soft/80",
         teal:
-          "bg-accent-teal text-white shadow-sm shadow-accent-teal/25 hover:bg-accent-teal/90",
+          "bg-secondary text-white hover:bg-secondary-dark shadow-xs",
       },
       size: {
-        default: "h-10 px-4 py-2",
+        default: "h-10 px-4 py-2 text-sm",
         sm: "h-8 px-3 text-xs rounded-md",
-        lg: "h-12 px-6 text-base rounded-lg",
+        lg: "h-12 px-6 text-base rounded-xl",
         icon: "h-10 w-10 p-0",
       },
     },

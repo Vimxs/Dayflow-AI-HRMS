@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { NotificationBell } from "@/components/shared/NotificationBell";
 import { LogOut, Shield, User } from "lucide-react";
@@ -40,15 +41,16 @@ export function AppHeader({ user }: AppHeaderProps) {
       : user?.name || user?.email.split("@")[0] || "User";
 
   return (
-    <header className="glass-panel sticky top-0 z-40 border-b border-border/80 bg-white/80 backdrop-blur-md">
+    <header className="w-full bg-white border-b border-border sticky top-0 z-40 shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Brand Logo & Tag */}
-        <div className="flex items-center gap-3">
+        {/* Brand Logo & Navigation Link */}
+        <Link
+          href={isAdmin ? "/admin/dashboard" : "/employee/dashboard"}
+          className="flex items-center gap-3 hover:opacity-90 transition-opacity"
+        >
           <div
-            className={`w-9 h-9 rounded-xl text-white flex items-center justify-center font-heading font-bold shadow-sm ${
-              isAdmin
-                ? "bg-primary shadow-primary/30"
-                : "bg-accent-teal shadow-accent-teal/30"
+            className={`w-9 h-9 rounded-lg text-white flex items-center justify-center font-heading font-extrabold text-lg shadow-xs ${
+              isAdmin ? "bg-primary" : "bg-secondary"
             }`}
           >
             D
@@ -59,27 +61,27 @@ export function AppHeader({ user }: AppHeaderProps) {
                 Dayflow
               </span>
               <span
-                className={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full ${
+                className={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md ${
                   isAdmin
                     ? "bg-primary-soft text-primary border border-primary/20"
-                    : "bg-accent-teal-soft text-accent-teal border border-accent-teal/20"
+                    : "bg-secondary-soft text-secondary border border-secondary/20"
                 }`}
               >
                 {isAdmin ? "Admin Console" : "Employee Portal"}
               </span>
             </div>
             <span className="text-[11px] text-ink-muted hidden sm:block -mt-0.5">
-              Single-Tenant AI HRMS & Payroll
+              People Operations Platform
             </span>
           </div>
-        </div>
+        </Link>
 
-        {/* Right Actions: Notification Bell + User Badge + Logout */}
+        {/* Right Actions: Notification Bell + User Chip + Logout */}
         <div className="flex items-center gap-3 sm:gap-4">
           <NotificationBell />
 
-          <div className="hidden sm:flex items-center gap-2.5 pl-2 border-l border-border">
-            <div className="w-8 h-8 rounded-full bg-surface-muted border border-border flex items-center justify-center text-xs font-bold text-ink-secondary">
+          <div className="hidden sm:flex items-center gap-2.5 pl-3 border-l border-border">
+            <div className="w-8 h-8 rounded-full bg-primary-soft text-primary font-bold flex items-center justify-center text-xs border border-primary/20">
               {displayName.charAt(0).toUpperCase()}
             </div>
             <div className="text-left text-xs">
@@ -93,7 +95,7 @@ export function AppHeader({ user }: AppHeaderProps) {
                   </>
                 ) : (
                   <>
-                    <User className="w-2.5 h-2.5 text-accent-teal" />{" "}
+                    <User className="w-2.5 h-2.5 text-secondary" />{" "}
                     {user?.employee?.employeeCode || "Staff"}
                   </>
                 )}
