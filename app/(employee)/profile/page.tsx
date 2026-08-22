@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useEffect, useState } from "react";
 import { AppShell } from "@/components/shared/AppShell";
@@ -6,6 +6,7 @@ import { ProfileView } from "@/components/profile/ProfileView";
 import { Loader2, AlertCircle } from "lucide-react";
 
 export default function EmployeeProfilePage() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [profile, setProfile] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

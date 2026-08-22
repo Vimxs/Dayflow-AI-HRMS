@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useEffect, useState, useCallback, use } from "react";
 import Link from "next/link";
@@ -14,6 +14,7 @@ export default function AdminEmployeeDetailPage({
   const resolvedParams = use(params);
   const employeeId = resolvedParams.id;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [profile, setProfile] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

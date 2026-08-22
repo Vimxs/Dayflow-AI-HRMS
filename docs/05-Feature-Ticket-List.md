@@ -54,9 +54,9 @@
 **Acceptance:** Status changes reflect immediately; all approvals audit-logged.
 
 ## Phase 6 — Payroll/Salary Management
-- [ ] T6.1 Employee read-only payroll view + salary slip download (PDF)
-- [ ] T6.2 Admin payroll CRUD (view all, update structure)
-- [ ] T6.3 Payroll change audit logging
+- [x] T6.1 Employee read-only payroll view + salary slip download (PDF)
+- [x] T6.2 Admin payroll CRUD (view all, update structure)
+- [x] T6.3 Payroll change audit logging
 
 **Acceptance:** Salary data never exposed in list endpoints; only detail view, role-gated.
 
