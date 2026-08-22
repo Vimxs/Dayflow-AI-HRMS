@@ -6,6 +6,7 @@
  */
 interface AppShellProps {
   children: React.ReactNode;
+  activeItem?: string;
 }
 
 export function AppShell({ children }: AppShellProps) {

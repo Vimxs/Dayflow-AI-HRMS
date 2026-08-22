@@ -61,17 +61,26 @@ prisma/migrations/
 
 ---
 
+## Phase 3 — Employee Profile Management (DONE)
+
+- **T3.1** ✅ — View Profile: role-gated profile view (personal info, job details, salary structure [owner/Admin only], documents list).
+- **T3.2** ✅ — Edit Profile (Employee): self-service profile updates restricted strictly to `phone`, `address`, and `profilePictureUrl`. Read-only protection on organizational fields.
+- **T3.3** ✅ — Edit Profile (Admin): full Admin CRUD capabilities across all employee profile fields (`firstName`, `lastName`, `jobTitle`, `department`, `dateOfJoining`, `phone`, `address`). Every Admin edit generates an immutable `AuditLog` record (`UPDATE_EMPLOYEE_PROFILE`).
+- **T3.4** ✅ — Document Management: Document upload with size (≤ 5MB) & format validation (PDF, PNG, JPEG only per Security doc §3), document list, and deletion with mandatory `AuditLog` records (`UPLOAD_DOCUMENT`, `DELETE_DOCUMENT`).
+
+---
+
 ## Key decisions / assumptions:
 - ASSUMPTION: Email provider not yet configured — stubbed via `console.warn` in dev until T7.1.
-- ASSUMPTION: S3 not yet configured — file uploads stubbed until T3.4.
+- ASSUMPTION: S3 not yet configured — file uploads stubbed to local storage/URLs until T3.4 integration pass.
 - ASSUMPTION: `docs/reference/Dayflow-HRMS-Requirements.pdf` is not committed (binary asset); developer adds it locally.
 - FIX: Upgraded/pinned Prisma to v6 to maintain standard Prisma ORM schema syntax for `DATABASE_URL`.
 - FIX: Router groups `/admin` and `/employee` updated to `/admin-dashboard` and `/employee-dashboard` to eliminate Next.js duplicate route conflicts.
 - FIX: `prisma generate` can fail with EPERM on Windows if `next dev` or `npx tsx` is running in background (locks DLL). Kill all Node processes first: `Get-Process -Name node | Stop-Process -Force`.
 
 ## Current phase & next ticket:
-- ✅ Neon DB: migrated + seeded + verified.
-- 🔜 Next: **Vercel deployment** — set environment variables, deploy, run live smoke test.
+- ✅ Phase 3 — Employee Profile Management (T3.1–T3.4) complete & verified.
+- 🔜 Next: **Merge `phase-3-profile` into `main`** or proceed to **Phase 4 — Attendance Management**.
 
 ---
 

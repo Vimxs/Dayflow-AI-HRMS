@@ -146,3 +146,6 @@ export async function requireOwnershipOrAdmin(
 
   return { session };
 }
+
+export const getAuthSession = getSession;
+

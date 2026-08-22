@@ -30,10 +30,10 @@
 **Acceptance:** Both dashboards render real (seeded) data, role-gated correctly.
 
 ## Phase 3 — Employee Profile Management
-- [ ] T3.1 View Profile (personal, job, salary [gated], documents, picture)
-- [ ] T3.2 Edit Profile — Employee (limited fields)
-- [ ] T3.3 Edit Profile — Admin (all fields)
-- [ ] T3.4 Document upload/view (type + size validated, private storage)
+- [x] T3.1 View Profile (personal, job, salary [gated], documents, picture)
+- [x] T3.2 Edit Profile — Employee (limited fields)
+- [x] T3.3 Edit Profile — Admin (all fields)
+- [x] T3.4 Document upload/view (type + size validated, private storage)
 
 **Acceptance:** Employees can only edit allowed fields; Admin edits are audit-logged.
 
