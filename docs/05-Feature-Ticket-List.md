@@ -3,22 +3,22 @@
 > Build strictly phase by phase. Do not start a phase until the previous phase's tickets are all marked DONE and manually verified. After finishing each phase, update `memory.md` (see Rules.md §7) before moving on.
 
 ## Phase 0 — Project Setup
-- [ ] T0.1 Initialize repo (Next.js + TypeScript + Tailwind + shadcn/ui)
-- [ ] T0.2 Set up Prisma + PostgreSQL connection, `.env.example`
-- [ ] T0.3 Configure ESLint, Prettier, Husky pre-commit hooks
-- [ ] T0.4 Set up base layout, design tokens (colors/fonts) from Frontend Spec
-- [ ] T0.5 Create `memory.md` scaffold (empty, ready for updates)
+- [x] T0.1 Initialize repo (Next.js + TypeScript + Tailwind + shadcn/ui)
+- [x] T0.2 Set up Prisma + PostgreSQL connection, `.env.example`
+- [x] T0.3 Configure ESLint, Prettier, Husky pre-commit hooks
+- [x] T0.4 Set up base layout, design tokens (colors/fonts) from Frontend Spec
+- [x] T0.5 Create `memory.md` scaffold (empty, ready for updates)
 
 **Acceptance:** App boots locally, empty themed shell renders, DB connects, migrations run.
 
 ## Phase 1 — Authentication & Authorization
 - [x] T1.1 Sign-up API + form (Employee ID, Email, Password, Role)
-- [ ] T1.2 Password hashing (bcrypt/argon2) + validation rules
-- [ ] T1.3 Email verification flow (token generation + verify endpoint + email send)
-- [ ] T1.4 Sign-in API + form + JWT issuance (access + refresh)
-- [ ] T1.5 RBAC middleware (route protection by role)
-- [ ] T1.6 Forgot password / reset password flow
-- [ ] T1.7 Logout (refresh token invalidation)
+- [x] T1.2 Password hashing (bcrypt/argon2) + validation rules
+- [x] T1.3 Email verification flow (token generation + verify endpoint + email send)
+- [x] T1.4 Sign-in API + form + JWT issuance (access + refresh)
+- [x] T1.5 RBAC middleware (route protection by role)
+- [x] T1.6 Forgot password / reset password flow
+- [x] T1.7 Logout (refresh token invalidation)
 
 **Acceptance:** A user can sign up, verify email, sign in, get redirected by role, and cannot access another role's routes. Covered by Security & Access Document §1–2.
 
