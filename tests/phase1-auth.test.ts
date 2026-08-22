@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Automated Verification Script for Phase 1 (Authentication & Authorization)
  * Tests T1.1 through T1.7 against the live endpoints and database.

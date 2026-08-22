@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * lib/email/mailer.ts
  * Email sending stub — console-only for Phases 0-6 (hackathon).

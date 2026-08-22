@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { PrismaClient, Role, AttendanceStatus, LeaveType, LeaveStatus } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
@@ -125,7 +126,7 @@ async function main() {
   }
 
   // 4. Seed Attendance Records for the current week
-  const today = new Date();
+  const _today = new Date();
   const getPastDate = (daysAgo: number) => {
     const d = new Date();
     d.setDate(d.getDate() - daysAgo);

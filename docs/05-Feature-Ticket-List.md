@@ -23,17 +23,17 @@
 **Acceptance:** A user can sign up, verify email, sign in, get redirected by role, and cannot access another role's routes. Covered by Security & Access Document §1–2.
 
 ## Phase 2 — Dashboards
-- [ ] T2.1 Employee Dashboard shell (quick-access cards, activity feed)
-- [ ] T2.2 Admin/HR Dashboard shell (KPI strip, employee list, switcher)
-- [ ] T2.3 Notification bell + basic in-app notification list
+- [x] T2.1 Employee Dashboard shell (quick-access cards, activity feed)
+- [x] T2.2 Admin/HR Dashboard shell (KPI strip, employee list, switcher)
+- [x] T2.3 Notification bell + basic in-app notification list
 
 **Acceptance:** Both dashboards render real (seeded) data, role-gated correctly.
 
 ## Phase 3 — Employee Profile Management
-- [ ] T3.1 View Profile (personal, job, salary [gated], documents, picture)
-- [ ] T3.2 Edit Profile — Employee (limited fields)
-- [ ] T3.3 Edit Profile — Admin (all fields)
-- [ ] T3.4 Document upload/view (type + size validated, private storage)
+- [x] T3.1 View Profile (personal, job, salary [gated], documents, picture)
+- [x] T3.2 Edit Profile — Employee (limited fields)
+- [x] T3.3 Edit Profile — Admin (all fields)
+- [x] T3.4 Document upload/view (type + size validated, private storage)
 
 **Acceptance:** Employees can only edit allowed fields; Admin edits are audit-logged.
 

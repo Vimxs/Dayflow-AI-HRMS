@@ -20,20 +20,53 @@
 
 ---
 
-## Phase 1 — Authentication & Authorization
+## Phase 1 — Authentication & Authorization (DONE)
+- **T1.1** ✅ — Sign-up API + form (`app/api/auth/sign-up/route.ts` & `components/forms/SignUpForm.tsx`, `app/(auth)/sign-up/page.tsx`). Rate-limited, validates corporate emails, hashes password (bcrypt cost 12), creates Employee record (`firstName`/`lastName`), generates verification token.
+- **T1.2** ✅ — Password hashing + validation rules with live `PasswordStrengthMeter` UI component (`components/ui/password-strength-meter.tsx`).
+- **T1.3** ✅ — Email verification flow (`app/api/auth/verify-email/route.ts`, `app/api/auth/resend-verification/route.ts`, `app/(auth)/verify-email/page.tsx`). Validates 24-hour token expiry, prevents reuse, handles resend requests.
+- **T1.4** ✅ — Sign-in API + form + JWT issuance (`app/api/auth/sign-in/route.ts`, `app/api/auth/refresh/route.ts`, `app/api/auth/me/route.ts`, `app/(auth)/sign-in/page.tsx`). Issues HTTP-only access tokens (15m) & refresh tokens (7d).
+- **T1.5** ✅ — RBAC middleware & route protection (`middleware.ts`, `lib/rbac/guards.ts`). Prevents unauthorized access and cross-role URL tampering, auto-redirects authenticated users to respective dashboard (`/admin/dashboard` vs `/employee/dashboard`).
+- **T1.6** ✅ — Forgot password / reset password flow (`app/api/auth/forgot-password/route.ts`, `app/api/auth/reset-password/route.ts`, `app/(auth)/forgot-password/page.tsx`, `app/(auth)/reset-password/page.tsx`). Validates single-use 1-hour reset tokens, revokes refresh tokens upon password reset.
+- **T1.7** ✅ — Logout endpoint (`app/api/auth/logout/route.ts`). Clears `dayflow_access_token` and `dayflow_refresh_token` HTTP-only cookies with `Max-Age=0` and invalidates DB refresh token record.
 
-- **T1.1** ✅ — Sign-up API + form complete and verified:
-  - Rate limiting: `lib/rate-limit.ts` (sliding window, 5 req / 15 min per IP+email).
-  - Zod schemas: `lib/validators/auth.ts` (strong password, terms required, NO client-submitted role).
-  - Sign-up endpoint: `app/api/auth/sign-up/route.ts` (forces `Role.EMPLOYEE`, bcrypt cost 12, verification token, console email stub).
-  - UI: `components/forms/SignUpForm.tsx` (password strength meter, terms checkbox, demo quick-verify link on success).
-  - `migrate status` confirmed clean on Neon DB: "Database schema is up to date!" (1 migration: `0_init`).
+---
+
+## Phase 2 — Dashboards & Notification System (DONE)
+- **T2.1** ✅ — Employee Dashboard shell (`app/employee/dashboard/page.tsx` & `app/api/employee/dashboard/route.ts`).
+  - Welcome greeting banner with live date and role badge
+  - 4 quick-access painted gradient cards (Attendance, Leaves, Salary & Slips, Profile)
+  - Weekly attendance streak tracker & 7-day status pills
+  - Leave balance cards (Paid, Sick, Pending)
+  - Real-time activity timeline feed
+- **T2.2** ✅ — Admin/HR Dashboard shell (`app/admin/dashboard/page.tsx` & `app/api/admin/dashboard/route.ts`).
+  - 4 KPI metric cards (Total Workforce, Present Today % turnout, Pending Approvals, On Leave Today)
+  - 7-day attendance distribution bar chart powered by Recharts with design token palette
+  - Pending leave approvals queue with supervisor action shortcuts
+  - Searchable Employee Directory table with department filters (Engineering, Sales, Marketing, HR, Finance, Operations)
+- **T2.3** ✅ — Notification bell & in-app notifications (`components/shared/NotificationBell.tsx`, `components/shared/AppHeader.tsx`, `app/api/notifications/route.ts`, `app/api/notifications/[id]/route.ts`).
+  - Live unread counter badge with pulsing animation
+  - Popover dropdown with categorized notification icons (Leave, Attendance, Payroll, General)
+  - Auto-refresh polling (30s) and click-to-mark-read / bulk mark-all-as-read
+
+---
+
+## Phase 3 — Employee Profile Management (DONE)
+- **T3.1** ✅ — View Profile (`app/employee/profile/page.tsx`, `app/api/profile/route.ts`).
+  - Personal Information, Employment Details, Role-gated Salary breakdown (Base + Allowances - Deductions = Net Pay), Document list.
+- **T3.2** ✅ — Edit Profile (Employee) (`app/api/profile/route.ts`).
+  - Server-side field level validation: strictly limits employee edits to `phone`, `address`, and `profilePictureUrl`. Rejects attempts to alter role, department, salary, or employeeCode.
+- **T3.3** ✅ — Edit Profile (Admin) & Directory (`app/admin/employees/page.tsx`, `app/admin/employees/[id]/page.tsx`, `app/api/admin/employees/route.ts`, `app/api/admin/employees/[id]/route.ts`).
+  - Full staff directory with instant search, department filters, and "Add New Employee" modal dialog.
+  - Complete employee inspector with editable personal, job, role, and compensation parameters.
+  - Generates immutable `AuditLog` records for every administrative modification.
+- **T3.4** ✅ — Document Upload & View (`app/api/documents/route.ts`, `app/api/documents/[id]/route.ts`).
+  - Enforces 5MB max file size and strict MIME type whitelist (PDF, PNG, JPEG, WEBP).
+  - Secure storage in `public/uploads/documents/` with unique namespaced filenames.
+  - Role-gated access allowing only document owners and Admins to view or delete documents, with audit logging.
 
 ---
 
 ## Migration History — Definitive Record
-
-> **Read this carefully to avoid re-creating confusion in future sessions.**
 
 ### What exists on disk
 ```
@@ -42,36 +75,22 @@ prisma/migrations/
     migration.sql   ← ONLY migration file. Created in Phase 0.
 ```
 
-### What `0_init` contains
-- All 4 enums (`Role`, `AttendanceStatus`, `LeaveType`, `LeaveStatus`)
-- All 8 tables: `users`, `employees`, `attendance`, `leave_requests`, `payroll`, `documents`, `notifications`, `audit_logs`
-- Auth columns on `users`: `verify_token`, `verify_token_exp`, `reset_token`, `reset_token_exp`, `refresh_token_hash` — **already present in `0_init`**; T1.1 did NOT require a separate migration.
-- `employees` table uses **`first_name` / `last_name`** columns (NOT `name`). The `name` column was briefly considered/attempted but **never applied to the DB**. Schema and seed both use `firstName`/`lastName`.
-
-### What does NOT exist
-- **`t1_1_auth_fields`** — This migration name (`20260822105000_t1_1_auth_fields`) was referenced in early T1.1 sessions but was **never created as a file**. It does not exist in `prisma/migrations/`. Do not attempt to create or resolve it again.
-- `0_init` is **not** a rename of `t1_1_auth_fields`. They are unrelated. `0_init` is the original Phase 0 baseline.
-
-### Neon DB status (as of 2026-08-22)
+### Neon DB status
 - `npx prisma migrate status` → **"Database schema is up to date!"** (1 migration applied: `0_init`)
-- Seeded rows confirmed in Neon:
-  - `admin@dayflow.dev` / `Admin@1234` — role: `ADMIN`, `isVerified: true`, Employee: Anita Sharma (EMP-0001)
-  - `rahul@dayflow.dev` / `Employee@1234` — role: `EMPLOYEE`, `isVerified: true`, Employee: Rahul Mehta (EMP-0002)
-- Direct (non-pooler) connection string works; pooler (`-pooler` host on port 5432) does **not** work from local machine. Always use direct host for CLI commands.
+- `prisma generate` updated client for `firstName` / `lastName` columns on `Employee`.
 
 ---
 
 ## Key decisions / assumptions:
 - ASSUMPTION: Email provider not yet configured — stubbed via `console.warn` in dev until T7.1.
-- ASSUMPTION: S3 not yet configured — file uploads stubbed until T3.4.
+- ASSUMPTION: S3 not yet configured — local disk storage with authenticated streaming used for T3.4; S3 transport added in future release.
 - ASSUMPTION: `docs/reference/Dayflow-HRMS-Requirements.pdf` is not committed (binary asset); developer adds it locally.
 - FIX: Upgraded/pinned Prisma to v6 to maintain standard Prisma ORM schema syntax for `DATABASE_URL`.
-- FIX: Router groups `/admin` and `/employee` updated to `/admin-dashboard` and `/employee-dashboard` to eliminate Next.js duplicate route conflicts.
-- FIX: `prisma generate` can fail with EPERM on Windows if `next dev` or `npx tsx` is running in background (locks DLL). Kill all Node processes first: `Get-Process -Name node | Stop-Process -Force`.
+- FIX: Next.js PostCSS & Tailwind v4 configured with `@tailwindcss/postcss` and theme tokens declared in `@theme` block in `app/globals.css`.
+- FIX: Wrapped all `useSearchParams()` calls in `<Suspense>` boundaries to ensure Next.js static prerendering compatibility.
 
 ## Current phase & next ticket:
-- ✅ Neon DB: migrated + seeded + verified.
-- 🔜 Next: **Vercel deployment** — set environment variables, deploy, run live smoke test.
+- 🔜 Next: **Phase 4 — Attendance Management — T4.1: Check-in / Check-out action + status logic**
 
 ---
 
