@@ -11,12 +11,12 @@ export function exportAttendanceToPDF(
   doc.setFontSize(18);
   doc.text(`Attendance Report - ${monthLabel}`, 14, 22);
 
-  const tableData = records.map((record) => [
+  const tableData: string[][] = records.map((record) => [
     new Date(record.date).toLocaleDateString(),
-    record.status,
-    record.checkIn || "-",
-    record.checkOut || "-",
-    record.hoursWorked?.toFixed(2) || "-",
+    String(record.status),
+    record.checkIn ? new Date(record.checkIn).toLocaleTimeString() : "-",
+    record.checkOut ? new Date(record.checkOut).toLocaleTimeString() : "-",
+    record.hoursWorked ? record.hoursWorked.toFixed(2) : "-",
   ]);
 
   autoTable(doc, {
