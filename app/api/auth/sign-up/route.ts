@@ -163,11 +163,11 @@ export async function POST(request: NextRequest) {
       }),
       { status: 201 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Sign-up API error:", error);
 
     // Handle Prisma unique constraint violation (e.g. from race conditions or missed duplicates)
-    if (error?.code === "P2002") {
+    if (error && typeof error === "object" && "code" in error && error.code === "P2002") {
       return NextResponse.json(
         errorResponse("An account with this email or Employee ID already exists"),
         { status: 400 }

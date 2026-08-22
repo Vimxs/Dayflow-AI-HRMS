@@ -169,77 +169,127 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Dashboard Metrics Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4">
-                  <div className="p-3.5 rounded-xl bg-canvas border border-border">
-                    <span className="text-xs text-ink-muted block font-medium">Total Staff</span>
-                    <span className="text-xl font-heading font-bold text-ink block mt-1">148</span>
-                    <span className="text-[11px] text-secondary font-semibold flex items-center gap-0.5 mt-0.5">
-                      <TrendingUp className="w-3 h-3" /> +12 this month
-                    </span>
-                  </div>
-                  <div className="p-3.5 rounded-xl bg-secondary-soft/50 border border-secondary/20">
-                    <span className="text-xs text-secondary-dark block font-medium">Present Today</span>
-                    <span className="text-xl font-heading font-bold text-secondary block mt-1">134</span>
-                    <span className="text-[11px] text-secondary/80">90.5% rate</span>
-                  </div>
-                  <div className="p-3.5 rounded-xl bg-primary-soft/50 border border-primary/20">
-                    <span className="text-xs text-primary block font-medium">On Leave</span>
-                    <span className="text-xl font-heading font-bold text-primary block mt-1">8</span>
-                    <span className="text-[11px] text-primary/80">Approved</span>
-                  </div>
-                  <div className="p-3.5 rounded-xl bg-warning-soft border border-warning/30">
-                    <span className="text-xs text-ink-secondary block font-medium">Pending Requests</span>
-                    <span className="text-xl font-heading font-bold text-warning block mt-1">6</span>
-                    <span className="text-[11px] text-ink-muted">Action required</span>
-                  </div>
-                </div>
-
-                {/* Mini Visualization & Table Roster */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-                  <div className="sm:col-span-2 p-4 rounded-xl border border-border bg-white space-y-3">
-                    <div className="flex items-center justify-between text-xs font-semibold text-ink">
-                      <span>Weekly Attendance Distribution</span>
-                      <span className="text-secondary font-mono">Teal = Present</span>
+                {/* Dynamic Preview Body based on activeTab */}
+                {activeTab === "overview" && (
+                  <div>
+                    {/* Dashboard Metrics Grid */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4">
+                      <div className="p-3.5 rounded-xl bg-canvas border border-border">
+                        <span className="text-xs text-ink-muted block font-medium">Total Staff</span>
+                        <span className="text-xl font-heading font-bold text-ink block mt-1">148</span>
+                        <span className="text-[11px] text-secondary font-semibold flex items-center gap-0.5 mt-0.5">
+                          <TrendingUp className="w-3 h-3" /> Active Roster
+                        </span>
+                      </div>
+                      <div className="p-3.5 rounded-xl bg-secondary-soft/50 border border-secondary/20">
+                        <span className="text-xs text-secondary-dark block font-medium">Present Today</span>
+                        <span className="text-xl font-heading font-bold text-secondary block mt-1">134</span>
+                        <span className="text-[11px] text-secondary/80">90.5% turnout</span>
+                      </div>
+                      <div className="p-3.5 rounded-xl bg-primary-soft/50 border border-primary/20">
+                        <span className="text-xs text-primary block font-medium">On Leave</span>
+                        <span className="text-xl font-heading font-bold text-primary block mt-1">8</span>
+                        <span className="text-[11px] text-primary/80">Approved</span>
+                      </div>
+                      <div className="p-3.5 rounded-xl bg-warning-soft border border-warning/30">
+                        <span className="text-xs text-ink-secondary block font-medium">Pending Approvals</span>
+                        <span className="text-xl font-heading font-bold text-warning block mt-1">6</span>
+                        <span className="text-[11px] text-ink-muted">Action required</span>
+                      </div>
                     </div>
-                    {/* Simulated SVG Bar Chart using palette */}
-                    <div className="h-28 flex items-end justify-between gap-2 pt-2 border-b border-border/60 pb-2">
-                      {[
-                        { day: "Mon", present: 92, leave: 8 },
-                        { day: "Tue", present: 96, leave: 4 },
-                        { day: "Wed", present: 94, leave: 6 },
-                        { day: "Thu", present: 90, leave: 10 },
-                        { day: "Fri", present: 88, leave: 12 },
-                      ].map((item) => (
-                        <div key={item.day} className="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
-                          <div className="w-full flex flex-col items-center gap-0.5">
-                            <div className="w-full rounded-t-xs bg-primary/20" style={{ height: `${item.leave * 1.5}px` }} />
-                            <div className="w-full rounded-t-xs bg-secondary" style={{ height: `${item.present * 0.8}px` }} />
+
+                    {/* Mini Visualization & Table Roster */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                      <div className="sm:col-span-2 p-4 rounded-xl border border-border bg-white space-y-3">
+                        <div className="flex items-center justify-between text-xs font-semibold text-ink">
+                          <span>Weekly Attendance Distribution</span>
+                          <span className="text-secondary font-mono">Teal = Present</span>
+                        </div>
+                        <div className="h-28 flex items-end justify-between gap-2 pt-2 border-b border-border/60 pb-2">
+                          {[
+                            { day: "Mon", present: 92, leave: 8 },
+                            { day: "Tue", present: 96, leave: 4 },
+                            { day: "Wed", present: 94, leave: 6 },
+                            { day: "Thu", present: 90, leave: 10 },
+                            { day: "Fri", present: 88, leave: 12 },
+                          ].map((item) => (
+                            <div key={item.day} className="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                              <div className="w-full flex flex-col items-center gap-0.5">
+                                <div className="w-full rounded-t-xs bg-primary/20" style={{ height: `${item.leave * 1.5}px` }} />
+                                <div className="w-full rounded-t-xs bg-secondary" style={{ height: `${item.present * 0.8}px` }} />
+                              </div>
+                              <span className="text-[10px] text-ink-muted">{item.day}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="p-4 rounded-xl border border-border bg-canvas space-y-2.5 text-xs">
+                        <span className="font-semibold text-ink block">Pending Leave Queue</span>
+                        <div className="p-2 rounded-lg bg-white border border-border flex items-center justify-between">
+                          <div>
+                            <span className="font-semibold block text-ink">Rahul Sharma</span>
+                            <span className="text-[10px] text-ink-muted">Sick Leave · 2 days</span>
                           </div>
-                          <span className="text-[10px] text-ink-muted">{item.day}</span>
+                          <Link href="/sign-in" className="px-2 py-0.5 rounded bg-secondary text-white font-bold text-[10px]">Review</Link>
+                        </div>
+                        <div className="p-2 rounded-lg bg-white border border-border flex items-center justify-between">
+                          <div>
+                            <span className="font-semibold block text-ink">Priya Patel</span>
+                            <span className="text-[10px] text-ink-muted">Paid Leave · 1 day</span>
+                          </div>
+                          <Link href="/sign-in" className="px-2 py-0.5 rounded bg-secondary text-white font-bold text-[10px]">Review</Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === "attendance" && (
+                  <div className="my-4 space-y-3">
+                    <div className="p-4 rounded-xl bg-surface-muted border border-border flex items-center justify-between">
+                      <div>
+                        <span className="text-xs text-ink-muted block font-medium">Daily Check-In Tracker</span>
+                        <span className="text-sm font-heading font-bold text-ink">Today: 09:12 AM &bull; Status: Present</span>
+                      </div>
+                      <Link href="/sign-in" className="px-3 py-1.5 bg-primary text-white text-xs font-semibold rounded-lg shadow-xs">
+                        Check Out
+                      </Link>
+                    </div>
+                    <div className="grid grid-cols-5 gap-2 pt-1 text-center">
+                      {[
+                        { day: "Mon", status: "Present", color: "text-secondary bg-secondary-soft" },
+                        { day: "Tue", status: "Present", color: "text-secondary bg-secondary-soft" },
+                        { day: "Wed", status: "Present", color: "text-secondary bg-secondary-soft" },
+                        { day: "Thu", status: "Half Day", color: "text-accent-amber bg-warning-soft" },
+                        { day: "Fri", status: "Present", color: "text-secondary bg-secondary-soft" },
+                      ].map((d) => (
+                        <div key={d.day} className={`p-2.5 rounded-lg border border-border/80 ${d.color}`}>
+                          <span className="text-[10px] font-bold uppercase block">{d.day}</span>
+                          <span className="text-xs font-semibold mt-0.5 block">{d.status}</span>
                         </div>
                       ))}
                     </div>
                   </div>
+                )}
 
-                  <div className="p-4 rounded-xl border border-border bg-canvas space-y-2.5 text-xs">
-                    <span className="font-semibold text-ink block">Quick Approvals</span>
-                    <div className="p-2 rounded-lg bg-white border border-border flex items-center justify-between">
+                {activeTab === "payroll" && (
+                  <div className="my-4 space-y-3">
+                    <div className="p-4 rounded-xl bg-white border border-border shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                       <div>
-                        <span className="font-semibold block text-ink">Rahul Sharma</span>
-                        <span className="text-[10px] text-ink-muted">Sick Leave · 2 days</span>
+                        <span className="text-xs text-ink-muted block font-medium">Monthly Take-Home Compensation</span>
+                        <span className="text-2xl font-heading font-extrabold text-ink">$6,850.00</span>
+                        <span className="text-[11px] text-ink-muted block mt-0.5">Base: $6,000 + Allowances: $1,200 - Deductions: $350</span>
                       </div>
-                      <span className="px-2 py-0.5 rounded bg-secondary text-white font-bold text-[10px]">Approve</span>
-                    </div>
-                    <div className="p-2 rounded-lg bg-white border border-border flex items-center justify-between">
-                      <div>
-                        <span className="font-semibold block text-ink">Priya Patel</span>
-                        <span className="text-[10px] text-ink-muted">Paid Leave · 1 day</span>
-                      </div>
-                      <span className="px-2 py-0.5 rounded bg-secondary text-white font-bold text-[10px]">Approve</span>
+                      <Link
+                        href="/sign-in"
+                        className="px-3.5 py-2 bg-secondary text-white text-xs font-semibold rounded-lg flex items-center gap-1.5 shadow-xs"
+                      >
+                        Download PDF Slip
+                      </Link>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
 

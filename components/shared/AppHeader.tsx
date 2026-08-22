@@ -22,8 +22,26 @@ interface AppHeaderProps {
   } | null;
 }
 
-export function AppHeader({ user }: AppHeaderProps) {
+export function AppHeader({ user: initialUser }: { user?: AppHeaderProps["user"] }) {
   const router = useRouter();
+  const [currentUser, setCurrentUser] = React.useState(initialUser || null);
+
+  React.useEffect(() => {
+    if (!currentUser || !currentUser.email) {
+      fetch("/api/auth/me")
+        .then((res) => res.json())
+        .then((json) => {
+          if (json.success && json.data) {
+            setCurrentUser({
+              email: json.data.email,
+              role: json.data.role,
+              employee: json.data.employee || null,
+            });
+          }
+        })
+        .catch(() => {});
+    }
+  }, [currentUser]);
 
   const handleLogout = async () => {
     try {
@@ -34,11 +52,12 @@ export function AppHeader({ user }: AppHeaderProps) {
     }
   };
 
+  const user = currentUser || initialUser;
   const isAdmin = user?.role === "ADMIN";
   const displayName =
     user?.employee?.firstName && user?.employee?.lastName
       ? `${user.employee.firstName} ${user.employee.lastName}`
-      : user?.name || user?.email.split("@")[0] || "User";
+      : user?.name || user?.email?.split("@")[0] || (isAdmin ? "Admin User" : "Employee");
 
   return (
     <header className="w-full bg-white border-b border-border sticky top-0 z-40 shadow-xs">
