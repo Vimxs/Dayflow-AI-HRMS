@@ -174,10 +174,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const message =
+      error instanceof Error
+        ? error.message
+        : "An unexpected server error occurred. Please try again later.";
+
     return NextResponse.json(
-      errorResponse(
-        error?.message || "An unexpected server error occurred. Please try again later."
-      ),
+      errorResponse(message),
       { status: 500 }
     );
   }
