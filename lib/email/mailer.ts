@@ -6,7 +6,9 @@
 
 import nodemailer from "nodemailer";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+const APP_URL =
+  process.env.NEXT_PUBLIC_APP_URL ||
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
 
 const isEmailConfigured = !!process.env.SMTP_USER && !!process.env.SMTP_PASS;
 
