@@ -122,21 +122,21 @@ export function AttendanceWidget({ todayRecord, onStatusUpdated }: AttendanceWid
             <Button
               onClick={handleCheckIn}
               isLoading={isLoading}
-              className="w-full sm:w-auto bg-accent-teal hover:bg-accent-teal/90 text-white font-bold h-12 px-6 shadow-lg shadow-accent-teal/20"
+              className="w-full sm:w-auto bg-secondary hover:bg-secondary-dark text-white font-bold h-11 px-6 shadow-xs"
             >
-              <LogIn className="w-5 h-5 mr-2" /> Check In Now
+              <LogIn className="w-4 h-4 mr-2" /> Check In Now
             </Button>
           ) : !isCheckedOut ? (
             <Button
               onClick={handleCheckOut}
               isLoading={isLoading}
-              className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white font-bold h-12 px-6 shadow-lg shadow-primary/20"
+              className="w-full sm:w-auto bg-primary hover:bg-primary-dark text-white font-bold h-11 px-6 shadow-xs"
             >
-              <LogOut className="w-5 h-5 mr-2" /> Check Out Now
+              <LogOut className="w-4 h-4 mr-2" /> Check Out Now
             </Button>
           ) : (
-            <div className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-accent-teal-soft text-accent-teal font-bold text-sm border border-accent-teal/30">
-              <CheckCircle2 className="w-5 h-5" /> Completed Shift Today
+            <div className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-secondary-soft text-secondary font-bold text-sm border border-secondary/30">
+              <CheckCircle2 className="w-4 h-4" /> Shift Completed Today
             </div>
           )}
         </div>
@@ -166,12 +166,12 @@ export function AttendanceWidget({ todayRecord, onStatusUpdated }: AttendanceWid
           <div className="text-sm font-bold mt-0.5">
             {todayRecord ? (
               <span
-                className={`inline-block px-2 py-0.5 rounded text-xs font-semibold ${
+                className={`inline-block px-2 py-0.5 rounded text-xs font-bold ${
                   todayRecord.status === "PRESENT"
-                    ? "bg-[#E6F8F5] text-[#0D9488]"
+                    ? "badge-present"
                     : todayRecord.status === "HALF_DAY"
-                    ? "bg-[#FEF6E9] text-[#D97706]"
-                    : "bg-[#EDEBFF] text-[#5B4FE9]"
+                    ? "badge-half-day"
+                    : "badge-leave"
                 }`}
               >
                 {todayRecord.status}

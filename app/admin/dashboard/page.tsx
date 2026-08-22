@@ -190,15 +190,15 @@ export default function AdminDashboardPage() {
 
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-8">
         {/* Welcome & Overview Header */}
-        <div className="relative overflow-hidden rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-[#EDEBFF] via-[#F4F1FF] to-[#FFF0EC] border border-primary/15 shadow-sm">
-          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="space-y-1.5">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 border border-primary/20 text-primary text-xs font-semibold shadow-xs">
+        <div className="rounded-2xl p-6 sm:p-8 bg-surface-muted border border-border">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="space-y-1">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-border text-primary text-xs font-bold uppercase tracking-wider">
                 <ShieldCheck className="w-3.5 h-3.5" />
-                <span>Executive HR & Operations Hub &bull; Organization Scope</span>
+                <span>Executive HR Command Hub &bull; Organization Scope</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-heading font-bold text-ink tracking-tight">
-                Workforce Command Console
+                Workforce Operations Console
               </h1>
               <p className="text-xs sm:text-sm text-ink-secondary">
                 Real-time staffing indicators, leave approval queue, and attendance analytics
@@ -208,15 +208,15 @@ export default function AdminDashboardPage() {
             <div className="flex items-center gap-3">
               <Link
                 href="/admin/employees"
-                className="px-4 py-2.5 rounded-xl bg-primary text-white text-xs font-semibold hover:bg-primary/90 shadow-sm shadow-primary/25 flex items-center gap-2 transition-colors"
+                className="px-4 py-2.5 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-primary-dark shadow-xs flex items-center gap-2 transition-colors"
               >
-                <Users className="w-4 h-4" /> Manage Staff
+                <Users className="w-4 h-4" /> Manage Roster
               </Link>
               <Link
                 href="/admin/leaves"
-                className="px-4 py-2.5 rounded-xl bg-white border border-border text-ink text-xs font-semibold hover:bg-surface-muted shadow-xs flex items-center gap-2 transition-colors"
+                className="px-4 py-2.5 rounded-lg bg-white border border-border text-ink text-xs font-semibold hover:bg-primary-soft hover:text-primary shadow-xs flex items-center gap-2 transition-colors"
               >
-                <Calendar className="w-4 h-4 text-accent-coral" /> Leave Approvals
+                <Calendar className="w-4 h-4 text-primary" /> Leave Approvals
               </Link>
             </div>
           </div>
@@ -228,7 +228,7 @@ export default function AdminDashboardPage() {
           <div className="glass-card p-5 border-l-4 border-l-primary">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-ink-muted">Total Workforce</span>
-              <div className="w-9 h-9 rounded-xl bg-primary-soft text-primary flex items-center justify-center">
+              <div className="w-9 h-9 rounded-lg bg-primary-soft text-primary flex items-center justify-center">
                 <Users className="w-4 h-4" />
               </div>
             </div>
@@ -236,17 +236,17 @@ export default function AdminDashboardPage() {
               <span className="text-3xl font-heading font-bold text-ink">
                 {kpis.totalEmployees}
               </span>
-              <span className="text-[11px] font-semibold text-accent-teal flex items-center gap-1">
-                <TrendingUp className="w-3.5 h-3.5" /> Active Staff
+              <span className="text-[11px] font-semibold text-secondary flex items-center gap-1">
+                <TrendingUp className="w-3.5 h-3.5" /> Active Roster
               </span>
             </div>
           </div>
 
           {/* KPI 2: Present Today */}
-          <div className="glass-card p-5 border-l-4 border-l-accent-teal">
+          <div className="glass-card p-5 border-l-4 border-l-secondary">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-ink-muted">Present Today</span>
-              <div className="w-9 h-9 rounded-xl bg-accent-teal-soft text-accent-teal flex items-center justify-center">
+              <div className="w-9 h-9 rounded-lg bg-secondary-soft text-secondary flex items-center justify-center">
                 <Clock className="w-4 h-4" />
               </div>
             </div>
@@ -254,35 +254,35 @@ export default function AdminDashboardPage() {
               <span className="text-3xl font-heading font-bold text-ink">
                 {kpis.presentToday}
               </span>
-              <span className="text-[11px] font-semibold text-accent-teal bg-accent-teal-soft px-2 py-0.5 rounded-full">
+              <span className="text-[11px] font-semibold text-secondary bg-secondary-soft px-2 py-0.5 rounded-full">
                 {attendanceRate}% Turnout
               </span>
             </div>
           </div>
 
           {/* KPI 3: Pending Approvals */}
-          <div className="glass-card p-5 border-l-4 border-l-accent-coral">
+          <div className="glass-card p-5 border-l-4 border-l-warning">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-ink-muted">Pending Approvals</span>
-              <div className="w-9 h-9 rounded-xl bg-accent-coral/10 text-accent-coral flex items-center justify-center">
-                <AlertCircle className="w-4 h-4" />
+              <div className="w-9 h-9 rounded-lg bg-warning-soft text-warning flex items-center justify-center">
+                <Calendar className="w-4 h-4" />
               </div>
             </div>
             <div className="mt-3 flex items-baseline justify-between">
               <span className="text-3xl font-heading font-bold text-ink">
                 {kpis.pendingApprovals}
               </span>
-              <span className="text-[11px] font-semibold text-accent-coral bg-accent-coral/10 px-2 py-0.5 rounded-full">
+              <span className="text-[11px] font-semibold text-warning bg-warning-soft px-2 py-0.5 rounded-full border border-warning/20">
                 Requires Action
               </span>
             </div>
           </div>
 
           {/* KPI 4: On Leave Today */}
-          <div className="glass-card p-5 border-l-4 border-l-accent-amber">
+          <div className="glass-card p-5 border-l-4 border-l-primary">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-ink-muted">On Leave Today</span>
-              <div className="w-9 h-9 rounded-xl bg-accent-amber/10 text-accent-amber flex items-center justify-center">
+              <div className="w-9 h-9 rounded-lg bg-primary-soft text-primary flex items-center justify-center">
                 <Calendar className="w-4 h-4" />
               </div>
             </div>
@@ -311,7 +311,7 @@ export default function AdminDashboardPage() {
                 </p>
               </div>
               <div className="flex items-center gap-2 text-xs">
-                <span className="px-2.5 py-1 rounded-full bg-primary-soft text-primary font-semibold text-[11px]">
+                <span className="px-2.5 py-1 rounded-full bg-secondary-soft text-secondary font-bold text-[11px] border border-secondary/20">
                   Real-time Synced
                 </span>
               </div>
@@ -320,23 +320,23 @@ export default function AdminDashboardPage() {
             <div className="h-64 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={attendanceTrend} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E7E5F5" />
-                  <XAxis dataKey="name" stroke="#6B7280" fontSize={12} tickLine={false} />
-                  <YAxis stroke="#6B7280" fontSize={12} tickLine={false} allowDecimals={false} />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E7E3E7" />
+                  <XAxis dataKey="name" stroke="#8F8F8F" fontSize={12} tickLine={false} />
+                  <YAxis stroke="#8F8F8F" fontSize={12} tickLine={false} allowDecimals={false} />
                   <Tooltip
                     contentStyle={{
                       backgroundColor: "#FFFFFF",
-                      borderRadius: "12px",
-                      border: "1px solid #E7E5F5",
-                      boxShadow: "0 4px 20px rgba(91,79,233,0.1)",
+                      borderRadius: "8px",
+                      border: "1px solid #E7E3E7",
+                      boxShadow: "0 2px 10px rgba(31,27,34,0.08)",
                       fontSize: "12px",
                     }}
                   />
                   <Legend iconType="circle" wrapperStyle={{ fontSize: "12px", paddingTop: "10px" }} />
-                  <Bar dataKey="Present" fill="#12B8A6" radius={[4, 4, 0, 0]} stackId="a" />
-                  <Bar dataKey="HalfDay" fill="#F5A623" radius={[4, 4, 0, 0]} stackId="a" />
-                  <Bar dataKey="Leave" fill="#5B4FE9" radius={[4, 4, 0, 0]} stackId="a" />
-                  <Bar dataKey="Absent" fill="#E5484D" radius={[4, 4, 0, 0]} stackId="a" />
+                  <Bar dataKey="Present" fill="#017E84" radius={[4, 4, 0, 0]} stackId="a" />
+                  <Bar dataKey="HalfDay" fill="#E4A900" radius={[4, 4, 0, 0]} stackId="a" />
+                  <Bar dataKey="Leave" fill="#714B67" radius={[4, 4, 0, 0]} stackId="a" />
+                  <Bar dataKey="Absent" fill="#C94F5D" radius={[4, 4, 0, 0]} stackId="a" />
                 </BarChart>
               </ResponsiveContainer>
             </div>

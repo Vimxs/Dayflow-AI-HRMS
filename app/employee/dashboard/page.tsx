@@ -153,10 +153,10 @@ export default function EmployeeDashboardPage() {
 
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-8">
         {/* Top Welcome Banner */}
-        <div className="relative overflow-hidden rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-[#EDEBFF] via-[#F4F1FF] to-[#E6F8F5] border border-primary/15 shadow-sm">
-          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="space-y-1.5">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 border border-primary/20 text-primary text-xs font-semibold shadow-xs">
+        <div className="rounded-2xl p-6 sm:p-8 bg-surface-muted border border-border">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="space-y-1">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-border text-primary text-xs font-bold uppercase tracking-wider">
                 <ShieldCheck className="w-3.5 h-3.5" />
                 <span>{employee.department} &bull; {employee.employeeCode}</span>
               </div>
@@ -170,32 +170,32 @@ export default function EmployeeDashboardPage() {
 
             {/* Attendance & Streak Quick Status Widget */}
             <div className="flex items-center gap-3">
-              <div className="glass-panel px-4 py-3 rounded-2xl border border-white/60 bg-white/70 shadow-xs flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-accent-coral/10 text-accent-coral flex items-center justify-center">
+              <div className="px-4 py-3 rounded-xl border border-border bg-white shadow-xs flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-primary-soft text-primary flex items-center justify-center">
                   <Flame className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-medium text-ink-muted block uppercase tracking-wider">
+                  <span className="text-[11px] font-semibold text-ink-muted block uppercase tracking-wider">
                     Streak
                   </span>
-                  <span className="text-lg font-heading font-bold text-ink leading-none">
+                  <span className="text-base font-heading font-bold text-ink leading-none">
                     {streak} {streak === 1 ? "Day" : "Days"}
                   </span>
                 </div>
               </div>
 
-              <div className="glass-panel px-4 py-3 rounded-2xl border border-white/60 bg-white/70 shadow-xs flex items-center gap-3">
+              <div className="px-4 py-3 rounded-xl border border-border bg-white shadow-xs flex items-center gap-3">
                 <div
-                  className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                  className={`w-9 h-9 rounded-lg flex items-center justify-center ${
                     todayAttendance?.status === "PRESENT"
-                      ? "bg-accent-teal/10 text-accent-teal"
-                      : "bg-accent-amber/10 text-accent-amber"
+                      ? "bg-secondary-soft text-secondary"
+                      : "bg-warning-soft text-warning"
                   }`}
                 >
                   <Clock className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-medium text-ink-muted block uppercase tracking-wider">
+                  <span className="text-[11px] font-semibold text-ink-muted block uppercase tracking-wider">
                     Today
                   </span>
                   <span className="text-sm font-semibold text-ink leading-none">
@@ -207,16 +207,15 @@ export default function EmployeeDashboardPage() {
           </div>
         </div>
 
-        {/* 4 Quick Access Painted Tiles */}
+        {/* 4 Quick Access Tiles */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Card 1: Attendance */}
           <Link
             href="/employee/attendance"
-            className="group relative p-5 rounded-2xl bg-white border border-border hover:border-accent-teal/40 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between overflow-hidden"
+            className="group relative p-5 rounded-xl bg-white border border-border hover:border-secondary/40 shadow-xs hover:shadow-sm transition-all duration-200 flex flex-col justify-between"
           >
-            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-accent-teal/10 to-transparent rounded-bl-full pointer-events-none" />
             <div className="flex items-center justify-between mb-4">
-              <div className="w-11 h-11 rounded-xl bg-accent-teal-soft text-accent-teal flex items-center justify-center group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 rounded-lg bg-secondary-soft text-secondary flex items-center justify-center group-hover:scale-105 transition-transform">
                 <Clock className="w-5 h-5" />
               </div>
               <span className="text-[11px] font-semibold text-accent-teal px-2 py-0.5 rounded-full bg-accent-teal-soft">

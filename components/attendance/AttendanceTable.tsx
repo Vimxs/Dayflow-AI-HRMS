@@ -91,7 +91,7 @@ export function AttendanceTable({ records, showEmployeeColumn = false }: Attenda
                   {showEmployeeColumn && r.employee && (
                     <td className="p-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-full bg-painted-header text-white font-bold text-xs flex items-center justify-center overflow-hidden flex-shrink-0">
+                        <div className="w-9 h-9 rounded-full bg-primary text-white font-bold text-xs flex items-center justify-center overflow-hidden flex-shrink-0">
                           {r.employee.profilePictureUrl ? (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img src={r.employee.profilePictureUrl} alt={r.employee.firstName} className="w-full h-full object-cover" />

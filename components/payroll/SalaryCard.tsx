@@ -89,25 +89,22 @@ export function SalaryCard({
         // Full layout — vertical with breakdown bar
         <div className="space-y-4">
           {/* Net pay hero */}
-          <div className="relative overflow-hidden rounded-2xl p-6 bg-gradient-to-br from-primary via-[#7B6FFF] to-[#A78BFA] text-white shadow-lg shadow-primary/20">
-            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_top_right,_white_0%,_transparent_60%)]" />
-            <div className="relative z-10">
-              <div className="flex items-center gap-2 mb-1">
-                <Wallet className="w-4 h-4 opacity-80" />
-                <span className="text-xs font-semibold opacity-80 tracking-wide uppercase">
-                  Net Monthly Take-Home
-                </span>
-              </div>
-              <div className="text-4xl font-heading font-bold tracking-tight">
-                {formatCurrency(netSalary)}
-              </div>
-              <div className="text-xs opacity-70 mt-1">
-                Effective from{" "}
-                {new Date(effectiveFrom).toLocaleDateString("en-US", {
-                  month: "long",
-                  year: "numeric",
-                })}
-              </div>
+          <div className="rounded-xl p-6 bg-primary text-white shadow-xs">
+            <div className="flex items-center gap-2 mb-1">
+              <Wallet className="w-4 h-4 opacity-90" />
+              <span className="text-xs font-bold opacity-90 tracking-wider uppercase">
+                Net Monthly Take-Home
+              </span>
+            </div>
+            <div className="text-4xl font-heading font-extrabold tracking-tight">
+              {formatCurrency(netSalary)}
+            </div>
+            <div className="text-xs opacity-80 mt-1 font-medium">
+              Effective from{" "}
+              {new Date(effectiveFrom).toLocaleDateString("en-US", {
+                month: "long",
+                year: "numeric",
+              })}
             </div>
           </div>
 

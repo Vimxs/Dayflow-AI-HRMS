@@ -1,23 +1,78 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
 
 @import "tailwindcss";
 
+@theme {
+  --color-primary: #714B67;
+  --color-primary-dark: #57384F;
+  --color-primary-soft: #F3EDF2;
+  --color-primary-pale: #FAF7F9;
+
+  --color-secondary: #017E84;
+  --color-secondary-dark: #01666B;
+  --color-secondary-soft: #EAF5F5;
+
+  --color-accent-teal: #017E84;
+  --color-accent-teal-soft: #EAF5F5;
+  --color-accent-coral: #017E84;
+  --color-accent-amber: #E4A900;
+
+  --color-danger: #C94F5D;
+  --color-danger-soft: #FDF2F3;
+
+  --color-success: #21B799;
+  --color-success-soft: #E6F8F5;
+  --color-warning: #E4A900;
+  --color-warning-soft: #FEF8E6;
+
+  --color-ink: #1F1B22;
+  --color-ink-secondary: #625D64;
+  --color-ink-muted: #8F8F8F;
+  --color-ink-light: #A09BA3;
+
+  --color-canvas: #FAFAFB;
+  --color-surface: #FFFFFF;
+  --color-surface-muted: #F7F6F8;
+  --color-border: #E7E3E7;
+
+  --font-sans: 'Inter', sans-serif;
+  --font-heading: 'Plus Jakarta Sans', 'Inter', sans-serif;
+}
+
 @layer base {
   :root {
-    --color-primary: #5B4FE9;
-    --color-primary-soft: #EDEBFF;
-    --color-accent-coral: #FF7A59;
-    --color-accent-teal: #12B8A6;
-    --color-accent-amber: #F5A623;
-    --color-danger: #E5484D;
-    --color-ink: #1A1B25;
-    --color-muted: #6B7280;
-    --color-canvas: #FBFAFF;
+    --color-primary: #714B67;
+    --color-primary-dark: #57384F;
+    --color-primary-soft: #F3EDF2;
+    --color-primary-pale: #FAF7F9;
+
+    --color-secondary: #017E84;
+    --color-secondary-dark: #01666B;
+    --color-secondary-soft: #EAF5F5;
+
+    --color-accent-teal: #017E84;
+    --color-accent-teal-soft: #EAF5F5;
+    --color-accent-coral: #017E84;
+    --color-accent-amber: #E4A900;
+
+    --color-danger: #C94F5D;
+    --color-danger-soft: #FDF2F3;
+
+    --color-success: #21B799;
+    --color-success-soft: #E6F8F5;
+    --color-warning: #E4A900;
+
+    --color-ink: #1F1B22;
+    --color-ink-secondary: #625D64;
+    --color-ink-muted: #8F8F8F;
+
+    --color-canvas: #FAFAFB;
     --color-surface: #FFFFFF;
-    --color-border: #E7E5F5;
+    --color-surface-muted: #F7F6F8;
+    --color-border: #E7E3E7;
 
     --font-inter: 'Inter', sans-serif;
-    --font-sora: 'Sora', sans-serif;
+    --font-jakarta: 'Plus Jakarta Sans', sans-serif;
   }
 
   * {
@@ -28,62 +83,55 @@
     background-color: var(--color-canvas);
     color: var(--color-ink);
     font-family: var(--font-inter);
-    background-image: 
-      radial-gradient(circle at 5% 15%, rgba(237, 235, 255, 0.8) 0%, rgba(251, 250, 255, 0.4) 40%),
-      radial-gradient(circle at 95% 85%, rgba(255, 240, 236, 0.6) 0%, rgba(251, 250, 255, 0.4) 40%),
-      radial-gradient(circle at 50% 50%, rgba(245, 243, 255, 0.4) 0%, rgba(251, 250, 255, 1) 100%);
-    background-attachment: fixed;
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-sora);
-    font-weight: 600;
+    font-family: var(--font-jakarta);
+    font-weight: 700;
+    color: var(--color-ink);
   }
 }
 
-
 @layer utilities {
   .glass-panel {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(231, 229, 245, 0.8);
-    box-shadow: 0 4px 24px rgba(91, 79, 233, 0.08);
+    background: #FFFFFF;
+    border: 1px solid #E7E3E7;
+    box-shadow: 0 2px 12px rgba(31, 27, 34, 0.03);
   }
 
   .glass-card {
     background: #FFFFFF;
-    border: 1px solid #E7E5F5;
-    box-shadow: 0 4px 24px rgba(91, 79, 233, 0.06);
+    border: 1px solid #E7E3E7;
+    box-shadow: 0 1px 3px rgba(31, 27, 34, 0.04), 0 4px 16px rgba(31, 27, 34, 0.02);
     border-radius: 12px;
     transition: all 0.2s ease-in-out;
   }
 
   .glass-card:hover {
-    box-shadow: 0 8px 32px rgba(91, 79, 233, 0.12);
-    border-color: #D5D1EB;
+    box-shadow: 0 4px 20px rgba(113, 75, 103, 0.08);
+    border-color: #D2C7D0;
   }
 
   .badge-present {
-    @apply bg-[#E6F8F5] text-[#0D9488] border border-[#B2ECE4];
+    @apply bg-[#EAF5F5] text-[#017E84] border border-[#B3DCDE] font-semibold;
   }
 
   .badge-absent {
-    @apply bg-[#FDECE8] text-[#E5484D] border border-[#F9C9C2];
+    @apply bg-[#FDF2F3] text-[#C94F5D] border border-[#F5C6CC] font-semibold;
   }
 
   .badge-half-day {
-    @apply bg-[#FEF6E9] text-[#D97706] border border-[#FDE2B3];
+    @apply bg-[#FEF8E6] text-[#E4A900] border border-[#FADF99] font-semibold;
   }
 
   .badge-leave {
-    @apply bg-[#EDEBFF] text-[#5B4FE9] border border-[#D5D1EB];
+    @apply bg-[#F3EDF2] text-[#714B67] border border-[#D8C7D4] font-semibold;
   }
 }
 
-/* Custom modern scrollbar */
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -94,10 +142,10 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #D5D1EB;
+  background: #D8C7D4;
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #5B4FE9;
+  background: #714B67;
 }

@@ -85,9 +85,9 @@ export function NotificationBell() {
       case "LEAVE_STATUS":
         return <Calendar className="w-3.5 h-3.5 text-primary" />;
       case "PAYROLL":
-        return <DollarSign className="w-3.5 h-3.5 text-accent-teal" />;
+        return <DollarSign className="w-3.5 h-3.5 text-secondary" />;
       case "ATTENDANCE":
-        return <Clock className="w-3.5 h-3.5 text-accent-amber" />;
+        return <Clock className="w-3.5 h-3.5 text-warning" />;
       default:
         return <Info className="w-3.5 h-3.5 text-primary" />;
     }
@@ -99,23 +99,23 @@ export function NotificationBell() {
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Notifications"
-        className="relative p-2 rounded-xl text-ink-muted hover:text-ink hover:bg-surface border border-border/60 hover:border-primary/30 transition-all focus:outline-none focus:ring-2 focus:ring-primary/20"
+        className="relative p-2 rounded-lg text-ink-muted hover:text-ink hover:bg-canvas border border-border transition-all focus:outline-none focus:ring-2 focus:ring-primary/20"
       >
         <Bell className="w-4 h-4 text-ink-secondary" />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-accent-coral text-white text-[10px] font-bold flex items-center justify-center shadow-sm animate-pulse">
+          <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-primary text-white text-[10px] font-bold flex items-center justify-center shadow-xs">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl bg-white border border-border shadow-xl shadow-primary/10 z-50 overflow-hidden animate-in fade-in-0 zoom-in-95 duration-150">
-          <div className="p-3.5 bg-canvas border-b border-border/80 flex items-center justify-between">
+        <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-xl bg-white border border-border shadow-md z-50 overflow-hidden animate-in fade-in-0 zoom-in-95 duration-150">
+          <div className="p-3.5 bg-canvas border-b border-border flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="font-heading font-bold text-sm text-ink">Notifications</span>
               {unreadCount > 0 && (
-                <span className="px-2 py-0.5 rounded-full bg-primary-soft text-primary text-[10px] font-semibold">
+                <span className="px-2 py-0.5 rounded-full bg-primary-soft text-primary text-[10px] font-bold">
                   {unreadCount} new
                 </span>
               )}
@@ -126,7 +126,7 @@ export function NotificationBell() {
                 type="button"
                 onClick={markAllAsRead}
                 disabled={loading}
-                className="text-[11px] text-primary hover:text-primary/80 font-medium flex items-center gap-1 transition-colors"
+                className="text-[11px] text-primary hover:text-primary-dark font-semibold flex items-center gap-1 transition-colors"
               >
                 <CheckCheck className="w-3.5 h-3.5" /> Mark all read
               </button>
@@ -151,11 +151,11 @@ export function NotificationBell() {
                   onClick={() => !n.isRead && markSingleAsRead(n.id)}
                   className={`p-3.5 flex items-start gap-3 transition-colors cursor-pointer text-left ${
                     n.isRead
-                      ? "bg-white hover:bg-canvas/60 opacity-80"
-                      : "bg-primary-soft/30 hover:bg-primary-soft/50 font-medium"
+                      ? "bg-white hover:bg-canvas/60 opacity-75"
+                      : "bg-primary-soft/40 hover:bg-primary-soft/60 font-medium"
                   }`}
                 >
-                  <div className="w-7 h-7 rounded-lg bg-surface border border-border flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-7 h-7 rounded-md bg-surface border border-border flex items-center justify-center flex-shrink-0 mt-0.5">
                     {getTypeIcon(n.type)}
                   </div>
                   <div className="flex-1 min-w-0">
