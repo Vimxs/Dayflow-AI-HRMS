@@ -1,7 +1,6 @@
-﻿"use client";
+"use client";
 
-import React from "react";
-import { Clock, Calendar, CheckCircle2, AlertCircle, User } from "lucide-react";
+import { Clock, Calendar, CheckCircle2, AlertCircle } from "lucide-react";
 
 export interface AttendanceRecordItem {
   id: string;

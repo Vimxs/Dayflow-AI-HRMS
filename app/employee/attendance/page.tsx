@@ -1,15 +1,23 @@
-﻿"use client";
+"use client";
 
 import React, { useEffect, useState, useCallback } from "react";
 import { AppShell } from "@/components/shared/AppShell";
-import { AttendanceWidget } from "@/components/attendance/AttendanceWidget";
-import { AttendanceTable } from "@/components/attendance/AttendanceTable";
+import { AttendanceWidget, type AttendanceWidgetRecord } from "@/components/attendance/AttendanceWidget";
+import { AttendanceTable, type AttendanceRecordItem } from "@/components/attendance/AttendanceTable";
 import { Clock, Calendar, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 
+interface AttendanceStats {
+  totalDays: number;
+  presentDays: number;
+  halfDays: number;
+  absentDays: number;
+  leaveDays: number;
+}
+
 export default function EmployeeAttendancePage() {
-  const [todayRecord, setTodayRecord] = useState<any>(null);
-  const [history, setHistory] = useState<any[]>([]);
-  const [stats, setStats] = useState<any>({
+  const [todayRecord, setTodayRecord] = useState<AttendanceWidgetRecord | null>(null);
+  const [history, setHistory] = useState<AttendanceRecordItem[]>([]);
+  const [stats, setStats] = useState<AttendanceStats>({
     totalDays: 0,
     presentDays: 0,
     halfDays: 0,

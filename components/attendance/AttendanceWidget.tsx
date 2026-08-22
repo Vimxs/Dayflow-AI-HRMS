@@ -1,18 +1,18 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Clock, LogIn, LogOut, CheckCircle2, AlertCircle, Calendar } from "lucide-react";
 
-interface AttendanceRecord {
-  id: string;
+export interface AttendanceWidgetRecord {
+  id?: string;
   checkIn?: string | Date | null;
   checkOut?: string | Date | null;
   status: "PRESENT" | "ABSENT" | "HALF_DAY" | "LEAVE";
 }
 
 interface AttendanceWidgetProps {
-  todayRecord: AttendanceRecord | null;
+  todayRecord: AttendanceWidgetRecord | null;
   onStatusUpdated?: () => void;
 }
 

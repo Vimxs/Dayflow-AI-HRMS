@@ -1,8 +1,8 @@
-﻿"use client";
+"use client";
 
 import React, { useEffect, useState, useCallback } from "react";
 import { AppShell } from "@/components/shared/AppShell";
-import { AttendanceTable } from "@/components/attendance/AttendanceTable";
+import { AttendanceTable, type AttendanceRecordItem } from "@/components/attendance/AttendanceTable";
 import { Input } from "@/components/ui/input";
 import {
   Clock,
@@ -10,20 +10,33 @@ import {
   Filter,
   CheckCircle2,
   AlertCircle,
-  Users,
   Loader2,
   RefreshCw,
 } from "lucide-react";
 
+interface AttendanceKPIs {
+  presentToday: number;
+  halfDayToday: number;
+  absentToday: number;
+  leaveToday: number;
+}
+
+interface EmployeeOption {
+  id: string;
+  firstName: string;
+  lastName: string;
+  employeeCode: string;
+}
+
 export default function AdminAttendancePage() {
-  const [records, setRecords] = useState<any[]>([]);
-  const [kpis, setKpis] = useState<any>({
+  const [records, setRecords] = useState<AttendanceRecordItem[]>([]);
+  const [kpis, setKpis] = useState<AttendanceKPIs>({
     presentToday: 0,
     halfDayToday: 0,
     absentToday: 0,
     leaveToday: 0,
   });
-  const [employees, setEmployees] = useState<any[]>([]);
+  const [employees, setEmployees] = useState<EmployeeOption[]>([]);
   const [selectedEmployee, setSelectedEmployee] = useState("ALL");
   const [selectedStatus, setSelectedStatus] = useState("ALL");
   const [startDate, setStartDate] = useState("");
