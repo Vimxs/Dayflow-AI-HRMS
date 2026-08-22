@@ -546,7 +546,7 @@ export default function AdminDashboardPage() {
                       </td>
                       <td className="px-4 py-3.5 text-right">
                         <Link
-                          href={`/admin/employees?id=${emp.id}`}
+                          href={`/admin/employees/${emp.id}`}
                           className="px-2.5 py-1 rounded-lg bg-surface border border-border hover:border-primary/40 text-primary font-semibold text-[11px] inline-flex items-center gap-1 transition-colors"
                         >
                           <span>Inspect</span>

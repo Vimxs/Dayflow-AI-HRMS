@@ -123,18 +123,31 @@ export async function POST(request: NextRequest) {
       return { user: newUser, employee: newEmployee };
     });
 
-    // 8. Trigger Verification Email (Console stub in dev)
+    // 8. Trigger Verification Email (Console stub when SMTP not configured)
+    // IMPORTANT: email is fire-and-forget — a mailer failure MUST NOT fail
+    // the sign-up response. The DB transaction has already committed.
     const appUrl =
       process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
     const verifyUrl = `${appUrl}/verify-email?token=${verifyToken}&email=${encodeURIComponent(email)}`;
 
-    await sendVerificationEmail(
-      email,
-      verifyToken,
-      `${firstName} ${lastName}`.trim()
-    );
+    try {
+      await sendVerificationEmail(
+        email,
+        verifyToken,
+        `${firstName} ${lastName}`.trim()
+      );
+    } catch (emailError) {
+      // Log server-side but never surface to client — account is already created
+      console.error(
+        "[sign-up] Verification email failed (account still created):",
+        emailError
+      );
+      // Always log the verify URL server-side for the demo stub so admins
+      // can manually share it when SMTP is unconfigured.
+      console.warn("[sign-up] Manual verification URL:", verifyUrl);
+    }
 
-    // 9. Response — include verifyUrl for demo quick-verify
+    // 9. Response
     return NextResponse.json(
       successResponse({
         message:
@@ -145,7 +158,7 @@ export async function POST(request: NextRequest) {
           role: result.user.role,
           employeeCode: result.employee.employeeCode,
           isVerified: result.user.isVerified,
-          demoVerifyUrl: verifyUrl, // Only for hackathon demo — remove in production
+          // demoVerifyUrl intentionally omitted — never send tokens to client
         },
       }),
       { status: 201 }

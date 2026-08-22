@@ -218,7 +218,7 @@ export function DocumentManager({ employeeId, documents, onDocumentUpdated }: Do
                     <div className="text-xs text-ink-muted flex items-center gap-2">
                       <span className="font-semibold text-primary">{doc.docType}</span>
                       <span>•</span>
-                      <span>{doc.fileSize ?? doc.fileSizeKb ? `${doc.fileSize ?? doc.fileSizeKb} KB` : "N/A"}</span>
+                      <span>{doc.fileSize != null ? `${Math.round(doc.fileSize / 1024)} KB` : "N/A"}</span>
                       <span>•</span>
                       <span>{new Date(doc.uploadedAt).toLocaleDateString()}</span>
                     </div>

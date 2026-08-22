@@ -80,7 +80,11 @@ export function AppHeader({ user }: AppHeaderProps) {
         <div className="flex items-center gap-3 sm:gap-4">
           <NotificationBell />
 
-          <div className="hidden sm:flex items-center gap-2.5 pl-3 border-l border-border">
+          <Link
+            href={isAdmin ? "/admin/employees" : "/employee/profile"}
+            className="hidden sm:flex items-center gap-2.5 pl-3 border-l border-border hover:opacity-85 transition-opacity"
+            title="View Profile"
+          >
             <div className="w-8 h-8 rounded-full bg-primary-soft text-primary font-bold flex items-center justify-center text-xs border border-primary/20">
               {displayName.charAt(0).toUpperCase()}
             </div>
@@ -101,7 +105,7 @@ export function AppHeader({ user }: AppHeaderProps) {
                 )}
               </span>
             </div>
-          </div>
+          </Link>
 
           <Button
             variant="outline"
