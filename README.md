@@ -6,7 +6,7 @@ Dayflow is a modern, full-stack Human Resource Management System designed for ag
 
 ---
 
-## 🎨 Design System — Modern Painted Theme
+##  Design System — Modern Painted Theme
 - **Primary Indigo-Violet:** `#5B4FE9`
 - **Soft Accent Coral:** `#FF7A59`
 - **Teal (Present/Approved):** `#12B8A6`
@@ -17,7 +17,7 @@ Dayflow is a modern, full-stack Human Resource Management System designed for ag
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 - **Framework:** Next.js 14+ (App Router) + TypeScript
 - **Styling:** Tailwind CSS + Custom Design System Tokens
 - **Database & ORM:** PostgreSQL 16 + Prisma ORM
@@ -27,7 +27,7 @@ Dayflow is a modern, full-stack Human Resource Management System designed for ag
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### 1. Prerequisites
 - Node.js 18+ / 20+
@@ -57,7 +57,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 👥 Seeded Demo Accounts
+##  Seeded Demo Accounts
 | Role | Email | Password | Details |
 |---|---|---|---|
 | **Admin / HR** | `admin@dayflow.com` | `Admin@123` | Anita Roy (HR Lead) |
@@ -66,7 +66,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 ```
 dayflow/
 ├── docs/
