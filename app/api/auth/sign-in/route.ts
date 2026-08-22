@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
       role: user.role,
       employeeId: user.employee?.id,
       employeeCode: user.employee?.employeeCode,
-      name: user.employee?.name,
+      name: user.employee ? `${user.employee.firstName} ${user.employee.lastName}`.trim() : undefined,
     };
 
     // Issue access token (15 mins) & refresh token (7 days)
@@ -113,7 +113,7 @@ export async function POST(req: NextRequest) {
           id: user.id,
           email: user.email,
           role: user.role,
-          name: user.employee?.name,
+          name: user.employee ? `${user.employee.firstName} ${user.employee.lastName}`.trim() : undefined,
           employeeCode: user.employee?.employeeCode,
           jobTitle: user.employee?.jobTitle,
           department: user.employee?.department,

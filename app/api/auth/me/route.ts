@@ -25,7 +25,8 @@ export async function GET(req: NextRequest) {
           select: {
             id: true,
             employeeCode: true,
-            name: true,
+            firstName: true,
+            lastName: true,
             phone: true,
             address: true,
             jobTitle: true,

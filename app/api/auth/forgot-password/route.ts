@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
     const emailResult = await sendPasswordResetEmail(
       user.email,
       token,
-      user.employee?.name || "Employee"
+      user.employee ? `${user.employee.firstName} ${user.employee.lastName}`.trim() : "Employee"
     );
 
     return NextResponse.json({

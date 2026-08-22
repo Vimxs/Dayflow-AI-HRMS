@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Dayflow HRMS — Sign Up API Endpoint
  * POST /api/auth/sign-up
  *
@@ -116,12 +116,12 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      // Combine firstName + lastName into name for Employee record
       const newEmployee = await tx.employee.create({
         data: {
           userId: newUser.id,
           employeeCode,
-          name: `${firstName} ${lastName}`.trim(),
+          firstName,
+          lastName,
           jobTitle: "Employee",
           department: "General",
           dateOfJoining: new Date(),

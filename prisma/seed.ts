@@ -34,7 +34,8 @@ async function main() {
       employee: {
         create: {
           employeeCode: "EMP001",
-          name: "Anita Roy",
+          firstName: "Anita",
+          lastName: "Roy",
           phone: "+91 98765 43210",
           address: "14B Palm Grove, Cyber City, Bangalore, KA 560103",
           jobTitle: "HR Lead & Operations",
@@ -65,7 +66,8 @@ async function main() {
       employee: {
         create: {
           employeeCode: "EMP002",
-          name: "Rahul Sharma",
+          firstName: "Rahul",
+          lastName: "Sharma",
           phone: "+91 91234 56789",
           address: "702 Sunshine Residency, Indiranagar, Bangalore, KA 560038",
           jobTitle: "Senior Software Engineer",
@@ -96,7 +98,8 @@ async function main() {
       employee: {
         create: {
           employeeCode: "EMP003",
-          name: "Priya Patel",
+          firstName: "Priya",
+          lastName: "Patel",
           phone: "+91 98877 66554",
           address: "23 Lakeview Heights, Koramangala, Bangalore, KA 560034",
           jobTitle: "Product Designer",

@@ -53,7 +53,7 @@ export async function getSession(req: NextRequest): Promise<AuthContext | null> 
     role: user.role,
     employeeId: user.employee?.id,
     employeeCode: user.employee?.employeeCode,
-    name: user.employee?.name,
+    name: user.employee ? `${user.employee.firstName} ${user.employee.lastName}`.trim() : undefined,
   };
 
   const newAccessToken = signAccessToken(payload);

@@ -54,7 +54,8 @@ model Employee {
   id                String         @id @default(cuid())
   userId            String         @unique @map("user_id")
   employeeCode      String         @unique @map("employee_code")
-  name              String
+  firstName         String         @map("first_name")
+  lastName          String         @map("last_name")
   phone             String?
   address           String?
   jobTitle          String         @map("job_title")
