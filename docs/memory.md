@@ -110,6 +110,7 @@ HTTP 400 Bad Request
 - DEV STUB / PRODUCTION NOTE: `lib/rate-limit.ts` uses an in-memory sliding window cache suitable for single-instance / local dev. Must be replaced with a distributed store (e.g. Redis / Upstash) prior to Vercel serverless production deployment.
 - FIX: Upgraded/pinned Prisma to v6 to maintain standard Prisma ORM schema syntax for `DATABASE_URL`.
 - FIX: Router groups `/admin` and `/employee` updated to `/admin-dashboard` and `/employee-dashboard` to eliminate Next.js duplicate route conflicts.
+- MIGRATION BASELINE: Generated `prisma/migrations/20260822105000_t1_1_auth_fields/migration.sql` matching current schema data model. In environments where schema was pushed directly, run `npx prisma migrate resolve --applied 20260822105000_t1_1_auth_fields` to mark as applied.
 
 ### Current phase & next ticket:
 - 🔜 Next: **Phase 1 — T1.2: Password hashing & validation rules**
