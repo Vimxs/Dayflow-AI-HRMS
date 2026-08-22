@@ -1,0 +1,205 @@
+// ============================================================
+// Dayflow HRMS — Prisma Schema
+// Source of truth: 02-Technical-Architecture-Document.md §4
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── Enums ────────────────────────────────────────────────────
+
+enum Role {
+  ADMIN
+  EMPLOYEE
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  HALF_DAY
+  LEAVE
+}
+
+enum LeaveType {
+  PAID
+  SICK
+  UNPAID
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+// ── Models ───────────────────────────────────────────────────
+
+/// Core authentication entity. One User = one login identity.
+model User {
+  id              String    @id @default(cuid())
+  email           String    @unique
+  passwordHash    String    @map("password_hash")
+  role            Role      @default(EMPLOYEE)
+  isVerified      Boolean   @default(false) @map("is_verified")
+  /// Time-limited single-use token for email verification (null when verified)
+  verifyToken     String?   @map("verify_token")
+  verifyTokenExp  DateTime? @map("verify_token_exp")
+  /// Time-limited single-use token for password reset
+  resetToken      String?   @map("reset_token")
+  resetTokenExp   DateTime? @map("reset_token_exp")
+  /// Refresh token stored hashed; invalidated on logout / rotation
+  refreshTokenHash String?  @map("refresh_token_hash")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  employee        Employee?
+  notifications   Notification[]
+  auditLogsActed  AuditLog[]     @relation("ActorLogs")
+
+  @@map("users")
+}
+
+/// HR/Employee profile — linked 1:1 to User.
+model Employee {
+  id                String    @id @default(cuid())
+  userId            String    @unique @map("user_id")
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  employeeCode      String    @unique @map("employee_code")
+  firstName         String    @map("first_name")
+  lastName          String    @map("last_name")
+  phone             String?
+  address           String?
+  jobTitle          String?   @map("job_title")
+  department        String?
+  dateOfJoining     DateTime? @map("date_of_joining")
+  profilePictureUrl String?   @map("profile_picture_url")
+
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  attendance        Attendance[]
+  leaveRequests     LeaveRequest[]
+  payroll           Payroll[]
+  documents         Document[]
+  /// Leave requests this employee reviewed (as Admin)
+  reviewedLeaves    LeaveRequest[] @relation("ReviewedLeaves")
+
+  @@map("employees")
+}
+
+/// Daily attendance record per employee.
+model Attendance {
+  id          String           @id @default(cuid())
+  employeeId  String           @map("employee_id")
+  employee    Employee         @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  date        DateTime         @db.Date
+  checkIn     DateTime?        @map("check_in")
+  checkOut    DateTime?        @map("check_out")
+  status      AttendanceStatus @default(PRESENT)
+
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+
+  @@unique([employeeId, date]) // One record per employee per day
+  @@map("attendance")
+}
+
+/// Leave/time-off request submitted by an Employee.
+model LeaveRequest {
+  id            String      @id @default(cuid())
+  employeeId    String      @map("employee_id")
+  employee      Employee    @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  leaveType     LeaveType   @map("leave_type")
+  startDate     DateTime    @map("start_date") @db.Date
+  endDate       DateTime    @map("end_date") @db.Date
+  remarks       String?
+  status        LeaveStatus @default(PENDING)
+
+  /// Admin/HR who reviewed this request (null if still pending)
+  reviewedById  String?     @map("reviewed_by_id")
+  reviewedBy    Employee?   @relation("ReviewedLeaves", fields: [reviewedById], references: [id])
+  reviewComment String?     @map("review_comment")
+  reviewedAt    DateTime?   @map("reviewed_at")
+
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+
+  @@map("leave_requests")
+}
+
+/// Salary structure for an Employee. Versioned by effective_from date.
+model Payroll {
+  id            String    @id @default(cuid())
+  employeeId    String    @map("employee_id")
+  employee      Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  baseSalary    Decimal   @map("base_salary") @db.Decimal(12, 2)
+  allowances    Decimal   @default(0) @db.Decimal(12, 2)
+  deductions    Decimal   @default(0) @db.Decimal(12, 2)
+  effectiveFrom DateTime  @map("effective_from") @db.Date
+
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  @@map("payroll")
+}
+
+/// Employee documents (contracts, certificates, ID proofs, etc.)
+model Document {
+  id          String    @id @default(cuid())
+  employeeId  String    @map("employee_id")
+  employee    Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  fileUrl     String    @map("file_url")  // Signed S3 URL or local stub
+  docType     String    @map("doc_type")  // e.g. "contract", "id_proof", "certificate"
+  fileName    String    @map("file_name")
+  fileSizeKb  Int?      @map("file_size_kb")
+  mimeType    String?   @map("mime_type")
+
+  uploadedAt  DateTime  @default(now()) @map("uploaded_at")
+
+  @@map("documents")
+}
+
+/// In-app notification for a User.
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  message   String
+  type      String   // e.g. "leave_approved", "leave_rejected", "approval_needed"
+  isRead    Boolean  @default(false) @map("is_read")
+  link      String?  // Optional deep-link URL inside the app
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("notifications")
+}
+
+/// Append-only audit log. Never updated or deleted via app layer (Security doc §6).
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String   @map("actor_id")
+  actor     User     @relation("ActorLogs", fields: [actorId], references: [id])
+
+  action    String   // e.g. "LEAVE_APPROVED", "PAYROLL_UPDATED", "PROFILE_EDITED"
+  entity    String   // e.g. "LeaveRequest", "Payroll", "Employee"
+  entityId  String   @map("entity_id")
+  metadata  Json?    // Before/after diff or extra context
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("audit_logs")
+}

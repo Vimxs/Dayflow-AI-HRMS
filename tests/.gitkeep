@@ -1,0 +1,7 @@
+/**
+ * Dayflow HRMS — Test suite
+ * E2E tests added in Phase 8 (T8.5) using Playwright.
+ * Unit tests added per-ticket using Vitest.
+ */
+
+// Placeholder — tests added ticket by ticket
