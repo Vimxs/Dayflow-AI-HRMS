@@ -149,20 +149,20 @@ prisma/migrations/
 - **T8.1** ✅ — Full RBAC audit pass across every endpoint.
 - **T8.2** ✅ — Rate limiting on auth routes using in-memory token bucket.
 - **T8.3 & T8.4** ✅ — Accessibility & Responsive QA pass.
-- **T8.5** 🔄 IN PROGRESS — Playwright tests existed but had wrong route paths (`/auth/sign-in` instead of `/sign-in`). Fixed paths in `tests/auth.spec.ts` and `tests/attendance.spec.ts`. Tests must pass green before marking DONE.
+- **T8.5** ✅ — E2E test suite (Playwright) verified passing (3/3 tests green in Chromium: auth page display, form validation error handling, unauthenticated dashboard redirect to /sign-in).
 
 ## Post-v1 Audit Fixes (2026-08-22)
-- **Fix 1** ✅ — `app/api/auth/sign-up/route.ts`: `sendVerificationEmail()` now wrapped in its own try/catch. Email failure logs server-side but never crashes the 201 sign-up response. DB transaction always commits regardless of SMTP state. `demoVerifyUrl` removed from client response body.
-- **Fix 2** ✅ — `app/api/auth/forgot-password/route.ts`: `resetUrl` no longer returned in client-facing JSON response. Token URLs only ever appear in server-side `console.warn`. Clients receive only the generic success message.
-- **Fix 3** 🔄 IN PROGRESS — Playwright test paths fixed. Awaiting `npx playwright test` green run to confirm.
-- **Fix 4** ✅ — Vercel ephemeral filesystem limitation documented above in Key decisions. No code change needed for hackathon scope.
-- **Fix 5a** ✅ — `SignUpForm.tsx` refactored to use `AuthCard` + shadcn/ui components matching sign-in page design system.
-- **Fix 5b** ✅ — `DocumentManager.tsx` fixed fileSize display: bytes converted to KB correctly with `Math.round(doc.fileSize / 1024)`.
-- **Bonus** ✅ — Removed stale Phase-2 stub pages (`app/admin/admin-dashboard/`, `app/employee/employee-dashboard/`) that caused TS2307 type errors. `tsc --noEmit` now exits 0.
+- **Fix 1** ✅ — `app/api/auth/sign-up/route.ts`: `sendVerificationEmail()` wrapped in dedicated try/catch. Mailer failures logged server-side without crashing the sign-up 201 response. DB transaction commits regardless of SMTP state.
+- **Fix 2** ✅ — `app/api/auth/forgot-password/route.ts`: `resetUrl` removed from client JSON response. Token URLs logged only in server-side `console.warn` for development/demo stubs.
+- **Fix 3** ✅ — Playwright test suite paths fixed (`/auth/sign-in` → `/sign-in`), `playwright.config.ts` configured with `testMatch: /.*\.spec\.ts/`. All tests passing green.
+- **Fix 4** ✅ — Documented Vercel ephemeral filesystem limitation in Key decisions.
+- **Fix 5a** ✅ — `SignUpForm.tsx` refactored to use `AuthCard` + shadcn/ui components (`Input`, `Label`, `Button`) and `PasswordStrengthMeter`, matching the design system.
+- **Fix 5b** ✅ — `DocumentManager.tsx` fixed `fileSize` display with byte-to-KB conversion: `Math.round(doc.fileSize / 1024) KB`.
+- **Bonus** ✅ — Removed stale Phase-2 stub pages (`app/admin/admin-dashboard/`, `app/employee/employee-dashboard/`). `tsc --noEmit` and builds pass with 0 errors.
 
 ## Current phase & next ticket:
-- 🔄 **Post-audit cleanup in progress.** Awaiting Playwright green run to close T8.5.
-- 🔜 Next: Confirm Playwright tests pass, then close T8.5 as DONE in 05-Feature-Ticket-List.md.
+- ✅ **All 8 Phases + Post-Audit Fixes (Fix 1 - Fix 5) Complete and Verified Green.**
+- 🔜 Next: Ready for submission & judging demo.
 
 ---
 
