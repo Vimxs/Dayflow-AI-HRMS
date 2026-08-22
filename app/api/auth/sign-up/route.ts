@@ -13,7 +13,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { randomBytes } from "crypto";
 import bcrypt from "bcryptjs";
-import { Role } from "@prisma/client";
 import { prisma } from "@/lib/db/prisma";
 import { signUpSchema } from "@/lib/validators/auth";
 import { checkRateLimit } from "@/lib/rate-limit";
@@ -102,7 +101,7 @@ export async function POST(request: NextRequest) {
         data: {
           email,
           passwordHash,
-          role: Role.EMPLOYEE, // Strictly forced server-side
+          role: "EMPLOYEE", // Strictly forced server-side
           isVerified: false,
           verifyToken,
           verifyTokenExp: expiresAt,
@@ -151,8 +150,17 @@ export async function POST(request: NextRequest) {
       }),
       { status: 201 }
     );
-  } catch (error) {
+  } catch (error: any) {
     console.error("Sign-up API error:", error);
+
+    // Handle Prisma unique constraint violation (e.g. from race conditions or missed duplicates)
+    if (error?.code === "P2002") {
+      return NextResponse.json(
+        errorResponse("An account with this email or Employee ID already exists"),
+        { status: 400 }
+      );
+    }
+
     return NextResponse.json(
       errorResponse(
         "An unexpected server error occurred. Please try again later."
