@@ -140,6 +140,11 @@ export async function PATCH(
             firstName: true,
             lastName: true,
             employeeCode: true,
+            user: {
+              select: {
+                email: true,
+              },
+            },
           },
         },
       },
@@ -221,7 +226,7 @@ export async function PATCH(
       },
     });
 
-    // 4. Create in-app notification for employee applicant (T5.4)
+    // 4. Create in-app notification and email for employee applicant (T5.4, T7.1)
     const startStr = existingLeave.startDate.toISOString().split("T")[0];
     const endStr = existingLeave.endDate.toISOString().split("T")[0];
     const commentSnippet = reviewComment ? ` Comment: "${reviewComment}"` : "";
@@ -233,6 +238,18 @@ export async function PATCH(
         message: `Your ${existingLeave.leaveType} leave request (${startStr} to ${endStr}) has been ${status}.${commentSnippet}`,
       },
     });
+
+    // Send email in the background
+    import("@/lib/email/mailer")
+      .then((mailer) =>
+        mailer.sendLeaveStatusUpdateEmail(
+          existingLeave.employee.user.email,
+          `${existingLeave.employee.firstName} ${existingLeave.employee.lastName}`,
+          status as "APPROVED" | "REJECTED",
+          reviewComment || ""
+        )
+      )
+      .catch((err) => console.error("Failed to send leave status email", err));
 
     return NextResponse.json({
       success: true,

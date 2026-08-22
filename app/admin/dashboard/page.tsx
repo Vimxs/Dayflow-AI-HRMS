@@ -27,6 +27,9 @@ import {
   Tooltip,
   Legend,
   CartesianGrid,
+  PieChart,
+  Pie,
+  Cell,
 } from "recharts";
 
 interface AdminDashboardData {
@@ -43,6 +46,11 @@ interface AdminDashboardData {
     HalfDay: number;
     Leave: number;
     Absent: number;
+  }>;
+  leaveDistribution: Array<{
+    name: string;
+    value: number;
+    color: string;
   }>;
   pendingApprovalsList: Array<{
     id: string;
@@ -391,6 +399,49 @@ export default function AdminDashboardPage() {
                 <ChevronRight className="w-3.5 h-3.5" />
               </Link>
             </div>
+          </div>
+        </div>
+
+        {/* Leave Type Distribution */}
+        <div className="glass-card p-6 mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="font-heading font-bold text-base text-ink">
+                Leave-Type Distribution
+              </h2>
+              <p className="text-xs text-ink-muted">
+                Year-to-date breakdown of approved leaves
+              </p>
+            </div>
+          </div>
+          <div className="h-64 w-full flex items-center justify-center">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={data.leaveDistribution}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={90}
+                  paddingAngle={5}
+                  dataKey="value"
+                >
+                  {data.leaveDistribution.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "#FFFFFF",
+                    borderRadius: "12px",
+                    border: "1px solid #E7E5F5",
+                    boxShadow: "0 4px 20px rgba(91,79,233,0.1)",
+                    fontSize: "12px",
+                  }}
+                />
+                <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ fontSize: "12px" }} />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
         </div>
 

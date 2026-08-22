@@ -4,7 +4,8 @@ import React, { useEffect, useState, useCallback } from "react";
 import { AppShell } from "@/components/shared/AppShell";
 import { AttendanceWidget, type AttendanceWidgetRecord } from "@/components/attendance/AttendanceWidget";
 import { AttendanceTable, type AttendanceRecordItem } from "@/components/attendance/AttendanceTable";
-import { Clock, Calendar, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import { exportAttendanceToPDF, exportAttendanceToCSV } from "@/lib/utils/export";
+import { Clock, Calendar, CheckCircle2, AlertCircle, Loader2, Download } from "lucide-react";
 
 interface AttendanceStats {
   totalDays: number;
@@ -125,11 +126,27 @@ export default function EmployeeAttendancePage() {
             <h2 className="text-lg font-bold text-ink flex items-center gap-2">
               <Calendar className="w-5 h-5 text-primary" /> Attendance Log
             </h2>
-            <div className="flex items-center gap-2 text-xs font-semibold">
-              <span className="badge-present px-2 py-0.5 rounded">Present</span>
-              <span className="badge-half-day px-2 py-0.5 rounded">Half Day</span>
-              <span className="badge-absent px-2 py-0.5 rounded">Absent</span>
-              <span className="badge-leave px-2 py-0.5 rounded">Leave</span>
+            <div className="flex items-center gap-3">
+              <div className="hidden md:flex items-center gap-2 text-xs font-semibold mr-2">
+                <span className="badge-present px-2 py-0.5 rounded">Present</span>
+                <span className="badge-half-day px-2 py-0.5 rounded">Half Day</span>
+                <span className="badge-absent px-2 py-0.5 rounded">Absent</span>
+                <span className="badge-leave px-2 py-0.5 rounded">Leave</span>
+              </div>
+              <button
+                onClick={() => exportAttendanceToPDF(history, "My_Attendance")}
+                className="px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-canvas hover:bg-primary-soft text-ink flex items-center gap-1 border border-border transition-colors"
+                title="Export PDF"
+              >
+                <Download className="w-3 h-3" /> PDF
+              </button>
+              <button
+                onClick={() => exportAttendanceToCSV(history, "My_Attendance")}
+                className="px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-canvas hover:bg-primary-soft text-ink flex items-center gap-1 border border-border transition-colors"
+                title="Export CSV"
+              >
+                <Download className="w-3 h-3" /> CSV
+              </button>
             </div>
           </div>
 

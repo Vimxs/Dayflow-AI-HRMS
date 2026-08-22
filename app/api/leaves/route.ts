@@ -319,14 +319,14 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // 3. Dispatch in-app notifications to all Admins (T5.4)
+    // 3. Dispatch in-app notifications and Emails to all Admins (T5.4, T7.1)
     const adminUsers = await prisma.user.findMany({
       where: { role: "ADMIN" },
-      select: { id: true },
+      select: { id: true, email: true },
     });
 
+    const applicantName = `${employee.firstName} ${employee.lastName}`;
     if (adminUsers.length > 0) {
-      const applicantName = `${employee.firstName} ${employee.lastName}`;
       await prisma.notification.createMany({
         data: adminUsers.map((admin) => ({
           userId: admin.id,
@@ -336,6 +336,21 @@ export async function POST(req: NextRequest) {
           }: ${startDate} to ${endDate}).`,
         })),
       });
+
+      // Send emails in the background
+      Promise.allSettled(
+        adminUsers.map((admin) =>
+          import("@/lib/email/mailer").then((mailer) =>
+            mailer.sendLeaveRequestEmail(admin.email, applicantName, {
+              type: leaveType,
+              startDate,
+              endDate,
+              days: requestedDays,
+              remarks: remarks || "None",
+            })
+          )
+        )
+      ).catch((err) => console.error("Failed to send leave request emails", err));
     }
 
     return NextResponse.json(

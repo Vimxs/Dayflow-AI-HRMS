@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { AppShell } from "@/components/shared/AppShell";
 import { AttendanceTable, type AttendanceRecordItem } from "@/components/attendance/AttendanceTable";
+import { exportAttendanceToPDF, exportAttendanceToCSV } from "@/lib/utils/export";
 import { Input } from "@/components/ui/input";
 import {
   Clock,
@@ -12,6 +13,7 @@ import {
   AlertCircle,
   Loader2,
   RefreshCw,
+  Download,
 } from "lucide-react";
 
 interface AttendanceKPIs {
@@ -109,12 +111,26 @@ export default function AdminAttendancePage() {
             </p>
           </div>
 
-          <button
-            onClick={fetchAttendance}
-            className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-canvas hover:bg-primary-soft text-ink flex items-center gap-1.5 border border-border"
-          >
-            <RefreshCw className="w-3.5 h-3.5" /> Refresh Data
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => exportAttendanceToPDF(records, "Master_Log")}
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-canvas hover:bg-primary-soft text-ink flex items-center gap-1.5 border border-border transition-colors"
+            >
+              <Download className="w-3.5 h-3.5" /> PDF
+            </button>
+            <button
+              onClick={() => exportAttendanceToCSV(records, "Master_Log")}
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-canvas hover:bg-primary-soft text-ink flex items-center gap-1.5 border border-border transition-colors"
+            >
+              <Download className="w-3.5 h-3.5" /> CSV
+            </button>
+            <button
+              onClick={fetchAttendance}
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-canvas hover:bg-primary-soft text-ink flex items-center gap-1.5 border border-border transition-colors"
+            >
+              <RefreshCw className="w-3.5 h-3.5" /> Refresh
+            </button>
+          </div>
         </div>
 
         {/* Today KPI Strip */}

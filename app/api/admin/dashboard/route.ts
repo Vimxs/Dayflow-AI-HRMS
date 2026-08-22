@@ -140,6 +140,34 @@ export async function GET(req: NextRequest) {
       take: 10,
     });
 
+    // 5. Leave Type Distribution (T7.3)
+    const thisYear = new Date(new Date().getFullYear(), 0, 1);
+    const leaveStats = await prisma.leaveRequest.groupBy({
+      by: ["leaveType"],
+      where: {
+        status: "APPROVED",
+        startDate: { gte: thisYear },
+      },
+      _count: {
+        _all: true,
+      },
+    });
+
+    const leaveDistribution = leaveStats.map(stat => ({
+      name: stat.leaveType === "PAID" ? "Paid Leave" : stat.leaveType === "SICK" ? "Sick Leave" : "Unpaid Leave",
+      value: stat._count._all,
+      color: stat.leaveType === "PAID" ? "#12B8A6" : stat.leaveType === "SICK" ? "#F5A623" : "#5B4FE9",
+    }));
+
+    // If no leaves approved yet this year, provide default zero values
+    if (leaveDistribution.length === 0) {
+      leaveDistribution.push(
+        { name: "Paid Leave", value: 0, color: "#12B8A6" },
+        { name: "Sick Leave", value: 0, color: "#F5A623" },
+        { name: "Unpaid Leave", value: 0, color: "#5B4FE9" }
+      );
+    }
+
     return NextResponse.json({
       success: true,
       data: {
@@ -150,6 +178,7 @@ export async function GET(req: NextRequest) {
           onLeaveToday,
         },
         attendanceTrend: chartDays,
+        leaveDistribution,
         pendingApprovalsList: pendingLeaveQueue,
         employees: recentEmployees,
       },
