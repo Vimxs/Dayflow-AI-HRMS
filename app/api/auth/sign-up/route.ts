@@ -36,8 +36,18 @@ export async function POST(request: NextRequest) {
       request.headers.get("x-forwarded-for")?.split(",")[0] || "127.0.0.1";
 
     // Parse body safely
-    const body = await request.json().catch(() => null);
-    if (!body) {
+    let body: any = null;
+    try {
+      body = await request.json();
+    } catch {
+      try {
+        const text = await request.text();
+        body = text ? JSON.parse(text) : null;
+      } catch {
+        body = null;
+      }
+    }
+    if (!body || typeof body !== "object") {
       return NextResponse.json(errorResponse("Invalid JSON payload"), {
         status: 400,
       });
