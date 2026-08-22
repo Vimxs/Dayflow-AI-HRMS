@@ -142,16 +142,27 @@ prisma/migrations/
 - FIX: `prisma generate` can fail with EPERM on Windows if `next dev` or `npx tsx` is running in background (locks DLL). Kill all Node processes first: `Get-Process -Name node | Stop-Process -Force`.
 - FIX: Next.js PostCSS & Tailwind v4 configured with `@tailwindcss/postcss` and theme tokens declared in `@theme` block in `app/globals.css`.
 - FIX: Wrapped all `useSearchParams()` calls in `<Suspense>` boundaries to ensure Next.js static prerendering compatibility.
+- **KNOWN LIMITATION (Hackathon Scope):** Document uploads use `public/uploads/documents/` (local disk). Vercel has an **ephemeral filesystem** — uploaded files do NOT persist across redeploys or between serverless invocations. This is intentional for the hackathon demo. Production requires migration to Vercel Blob, S3, or Cloudinary before real deployment.
+- CORRECTION: forgot-password token expiry is **15 minutes** (not 1 hour as previously noted in this file). 15m is correct per code; docs updated.
 
 ## Phase 8 — Hardening & Polish (DONE)
 - **T8.1** ✅ — Full RBAC audit pass across every endpoint.
 - **T8.2** ✅ — Rate limiting on auth routes using in-memory token bucket.
 - **T8.3 & T8.4** ✅ — Accessibility & Responsive QA pass.
-- **T8.5** ✅ — E2E test suite setup (Playwright) with basic auth and attendance flows.
+- **T8.5** 🔄 IN PROGRESS — Playwright tests existed but had wrong route paths (`/auth/sign-in` instead of `/sign-in`). Fixed paths in `tests/auth.spec.ts` and `tests/attendance.spec.ts`. Tests must pass green before marking DONE.
+
+## Post-v1 Audit Fixes (2026-08-22)
+- **Fix 1** ✅ — `app/api/auth/sign-up/route.ts`: `sendVerificationEmail()` now wrapped in its own try/catch. Email failure logs server-side but never crashes the 201 sign-up response. DB transaction always commits regardless of SMTP state. `demoVerifyUrl` removed from client response body.
+- **Fix 2** ✅ — `app/api/auth/forgot-password/route.ts`: `resetUrl` no longer returned in client-facing JSON response. Token URLs only ever appear in server-side `console.warn`. Clients receive only the generic success message.
+- **Fix 3** 🔄 IN PROGRESS — Playwright test paths fixed. Awaiting `npx playwright test` green run to confirm.
+- **Fix 4** ✅ — Vercel ephemeral filesystem limitation documented above in Key decisions. No code change needed for hackathon scope.
+- **Fix 5a** ✅ — `SignUpForm.tsx` refactored to use `AuthCard` + shadcn/ui components matching sign-in page design system.
+- **Fix 5b** ✅ — `DocumentManager.tsx` fixed fileSize display: bytes converted to KB correctly with `Math.round(doc.fileSize / 1024)`.
+- **Bonus** ✅ — Removed stale Phase-2 stub pages (`app/admin/admin-dashboard/`, `app/employee/employee-dashboard/`) that caused TS2307 type errors. `tsc --noEmit` now exits 0.
 
 ## Current phase & next ticket:
-- ✅ **Version 1.0 Complete!** All Phases (Phase 0 to Phase 8) are fully built and verified.
-- 🔜 Next: Setup CI/CD, production deployment, or future backlog enhancements.
+- 🔄 **Post-audit cleanup in progress.** Awaiting Playwright green run to close T8.5.
+- 🔜 Next: Confirm Playwright tests pass, then close T8.5 as DONE in 05-Feature-Ticket-List.md.
 
 ---
 
