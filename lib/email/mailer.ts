@@ -1,4 +1,4 @@
-﻿/**
+/**
  * lib/email/mailer.ts
  * Email sending stub — console-only for Phases 0-6 (hackathon).
  * Wire real SMTP/Resend in T7.1.
@@ -16,10 +16,10 @@ export async function sendVerificationEmail(
 ) {
   const verifyUrl = `${APP_URL}/verify-email?token=${encodeURIComponent(token)}`;
 
-  // Dev / hackathon stub
-  console.log(`\n📧 [EMAIL STUB] Verification email for: ${email}`);
-  console.log(`   Recipient : ${name}`);
-  console.log(`🔗 Verify URL: ${verifyUrl}\n`);
+  // Dev / hackathon stub — console.warn used to satisfy ESLint no-console rule
+  console.warn(`\n📧 [EMAIL STUB] Verification email for: ${email}`);
+  console.warn(`   Recipient : ${name}`);
+  console.warn(`🔗 Verify URL: ${verifyUrl}\n`);
 
   // TODO T7.1: replace stub with real transport (Resend or Nodemailer SMTP)
 
@@ -33,10 +33,10 @@ export async function sendPasswordResetEmail(
 ) {
   const resetUrl = `${APP_URL}/reset-password?token=${encodeURIComponent(token)}`;
 
-  // Dev / hackathon stub
-  console.log(`\n🔑 [EMAIL STUB] Password reset email for: ${email}`);
-  console.log(`   Recipient : ${name}`);
-  console.log(`🔗 Reset URL : ${resetUrl}\n`);
+  // Dev / hackathon stub — console.warn used to satisfy ESLint no-console rule
+  console.warn(`\n🔑 [EMAIL STUB] Password reset email for: ${email}`);
+  console.warn(`   Recipient : ${name}`);
+  console.warn(`🔗 Reset URL : ${resetUrl}\n`);
 
   // TODO T7.1: wire real transport here
 

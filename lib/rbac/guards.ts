@@ -7,7 +7,6 @@ import {
   rotateRefreshToken,
   signAccessToken,
   TokenPayload,
-  getAuthCookieOptions,
 } from "@/lib/auth/jwt";
 import { prisma } from "@/lib/db/prisma";
 
