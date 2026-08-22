@@ -236,33 +236,30 @@ export default function EmployeeDashboardPage() {
               <span>View Timesheet</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </div>
-          </Link>
-
-          {/* Card 2: Leave Requests */}
+          </Link>          {/* Card 2: Leave Requests */}
           <Link
             href="/employee/leaves"
-            className="group relative p-5 rounded-2xl bg-white border border-border hover:border-accent-coral/40 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between overflow-hidden"
+            className="group relative p-5 rounded-xl bg-white border border-border hover:border-primary/40 shadow-xs hover:shadow-sm transition-all duration-200 flex flex-col justify-between"
           >
-            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-accent-coral/10 to-transparent rounded-bl-full pointer-events-none" />
             <div className="flex items-center justify-between mb-4">
-              <div className="w-11 h-11 rounded-xl bg-accent-coral/10 text-accent-coral flex items-center justify-center group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 rounded-lg bg-primary-soft text-primary flex items-center justify-center group-hover:scale-105 transition-transform">
                 <Calendar className="w-5 h-5" />
               </div>
               {leaveBalances.pendingRequests > 0 && (
-                <span className="text-[11px] font-semibold text-accent-coral px-2 py-0.5 rounded-full bg-accent-coral/10">
+                <span className="text-[11px] font-bold text-primary px-2 py-0.5 rounded-full bg-primary-soft border border-primary/20">
                   {leaveBalances.pendingRequests} Pending
                 </span>
               )}
             </div>
             <div>
-              <h2 className="font-heading font-bold text-ink text-base group-hover:text-accent-coral transition-colors">
+              <h2 className="font-heading font-bold text-ink text-base group-hover:text-primary transition-colors">
                 Time-Off & Leave
               </h2>
               <p className="text-xs text-ink-muted mt-0.5">
                 {leaveBalances.paid} Paid &bull; {leaveBalances.sick} Sick Remaining
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-border/60 flex items-center justify-between text-xs font-semibold text-accent-coral">
+            <div className="mt-4 pt-3 border-t border-border/60 flex items-center justify-between text-xs font-semibold text-primary">
               <span>Apply for Leave</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </div>
@@ -271,19 +268,18 @@ export default function EmployeeDashboardPage() {
           {/* Card 3: Payroll */}
           <Link
             href="/employee/payroll"
-            className="group relative p-5 rounded-2xl bg-white border border-border hover:border-primary/40 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between overflow-hidden"
+            className="group relative p-5 rounded-xl bg-white border border-border hover:border-secondary/40 shadow-xs hover:shadow-sm transition-all duration-200 flex flex-col justify-between"
           >
-            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-primary/10 to-transparent rounded-bl-full pointer-events-none" />
             <div className="flex items-center justify-between mb-4">
-              <div className="w-11 h-11 rounded-xl bg-primary-soft text-primary flex items-center justify-center group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 rounded-lg bg-secondary-soft text-secondary flex items-center justify-center group-hover:scale-105 transition-transform">
                 <DollarSign className="w-5 h-5" />
               </div>
-              <span className="text-[11px] font-semibold text-primary px-2 py-0.5 rounded-full bg-primary-soft">
+              <span className="text-[11px] font-bold text-secondary px-2 py-0.5 rounded-full bg-secondary-soft border border-secondary/20">
                 {latestPayroll ? latestPayroll.month : "Confidential"}
               </span>
             </div>
             <div>
-              <h2 className="font-heading font-bold text-ink text-base group-hover:text-primary transition-colors">
+              <h2 className="font-heading font-bold text-ink text-base group-hover:text-secondary transition-colors">
                 Salary & Slips
               </h2>
               <p className="text-xs text-ink-muted mt-0.5">
@@ -292,7 +288,7 @@ export default function EmployeeDashboardPage() {
                   : "View monthly breakdown"}
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-border/60 flex items-center justify-between text-xs font-semibold text-primary">
+            <div className="mt-4 pt-3 border-t border-border/60 flex items-center justify-between text-xs font-semibold text-secondary">
               <span>View Payslip</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </div>
@@ -301,27 +297,26 @@ export default function EmployeeDashboardPage() {
           {/* Card 4: My Profile */}
           <Link
             href="/employee/profile"
-            className="group relative p-5 rounded-2xl bg-white border border-border hover:border-accent-amber/40 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between overflow-hidden"
+            className="group relative p-5 rounded-xl bg-white border border-border hover:border-primary/40 shadow-xs hover:shadow-sm transition-all duration-200 flex flex-col justify-between"
           >
-            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-accent-amber/10 to-transparent rounded-bl-full pointer-events-none" />
             <div className="flex items-center justify-between mb-4">
-              <div className="w-11 h-11 rounded-xl bg-accent-amber/10 text-accent-amber flex items-center justify-center group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 rounded-lg bg-primary-soft text-primary flex items-center justify-center group-hover:scale-105 transition-transform">
                 <User className="w-5 h-5" />
               </div>
-              <span className="text-[11px] font-semibold text-accent-amber px-2 py-0.5 rounded-full bg-accent-amber/10">
+              <span className="text-[11px] font-bold text-primary px-2 py-0.5 rounded-full bg-primary-soft border border-primary/20">
                 Verified
               </span>
             </div>
             <div>
-              <h2 className="font-heading font-bold text-ink text-base group-hover:text-accent-amber transition-colors">
+              <h2 className="font-heading font-bold text-ink text-base group-hover:text-primary transition-colors">
                 My Profile
               </h2>
               <p className="text-xs text-ink-muted mt-0.5">
                 Personal info & documents
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-border/60 flex items-center justify-between text-xs font-semibold text-accent-amber">
-              <span>Edit Details</span>
+            <div className="mt-4 pt-3 border-t border-border/60 flex items-center justify-between text-xs font-semibold text-primary">
+              <span>Edit Profile</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </div>
           </Link>

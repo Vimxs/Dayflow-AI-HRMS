@@ -69,7 +69,7 @@ export default function Home() {
       </header>
 
       {/* 2. HERO SECTION */}
-      <section className="bg-gradient-to-b from-white via-canvas to-surface-muted border-b border-border py-16 lg:py-24">
+      <section id="overview" className="bg-gradient-to-b from-white via-canvas to-surface-muted border-b border-border py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             
@@ -248,7 +248,7 @@ export default function Home() {
       </section>
 
       {/* 3. TRUST & VALUE INDICATORS */}
-      <section className="bg-white border-b border-border py-10">
+      <section id="about" className="bg-white border-b border-border py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="flex items-start gap-3.5 p-4 rounded-xl bg-canvas border border-border">
