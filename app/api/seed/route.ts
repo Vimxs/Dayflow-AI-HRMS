@@ -15,6 +15,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import bcrypt from "bcryptjs";
 
+// GET /api/seed — health check to verify route is deployed
+export async function GET() {
+  return NextResponse.json({
+    success: true,
+    message: "Seed route is available. Send a POST request with {secret: '<SEED_SECRET>'} to seed the database.",
+  });
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}));
