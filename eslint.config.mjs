@@ -5,6 +5,9 @@ import reactPlugin from "eslint-plugin-react";
 
 const eslintConfig = [
   {
+    ignores: [".next/**", "node_modules/**", "dist/**", "build/**"],
+  },
+  {
     files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.mjs"],
     plugins: {
       "@next/next": nextPlugin,
