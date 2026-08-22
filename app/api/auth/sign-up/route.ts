@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
       request.headers.get("x-forwarded-for")?.split(",")[0] || "127.0.0.1";
 
     // Parse body safely
-    let body: any = null;
+    let body: Record<string, unknown> | null = null;
     try {
       body = await request.json();
     } catch {
