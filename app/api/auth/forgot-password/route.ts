@@ -64,10 +64,13 @@ export async function POST(req: NextRequest) {
       user.employee ? `${user.employee.firstName} ${user.employee.lastName}`.trim() : "Employee"
     );
 
-    return NextResponse.json({
-      ...genericSuccessResponse,
-      resetUrl: emailResult?.resetUrl, // For developer convenience
-    });
+    // Log the reset URL server-side only (demo convenience when SMTP is unconfigured)
+    // NEVER include token URLs in client-facing API responses
+    if (emailResult?.resetUrl) {
+      console.warn("[forgot-password] Manual reset URL (server-side only):", emailResult.resetUrl);
+    }
+
+    return NextResponse.json(genericSuccessResponse);
   } catch (error) {
     console.error("Forgot password API error:", error);
     return NextResponse.json(
