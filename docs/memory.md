@@ -101,6 +101,18 @@
 
 ---
 
+## Phase 6 — Payroll / Salary Management (DONE)
+- **T6.1** ✅ — Employee Read-Only Payroll & PDF Salary Slip (`app/employee/payroll/page.tsx`, `app/api/payroll/[employeeId]/slip/route.ts`, `lib/pdf/salary-slip.tsx`).
+  - Read-only salary card with base, allowances, deductions, and net take-home breakdown.
+  - Month navigator widget and server-side Dayflow-branded PDF salary slip generation (`@react-pdf/renderer`).
+- **T6.2** ✅ — Admin Payroll Management & Quick-Edit Drawer (`app/admin/payroll/page.tsx`, `app/admin/payroll/[employeeId]/page.tsx`, `app/api/payroll/route.ts`, `app/api/payroll/[employeeId]/route.ts`).
+  - Total monthly payroll KPI metrics, searchable table, and department filters.
+  - Quick-edit side drawer and dedicated employee payroll console with live net pay calculation.
+- **T6.3** ✅ — Payroll Change Audit Logging (`app/api/payroll/[employeeId]/route.ts`, `app/api/payroll/route.ts`).
+  - Generates immutable `AuditLog` entries for every create, update, or delete action on payroll records.
+
+---
+
 ## Migration History — Definitive Record
 
 ### What exists on disk
@@ -123,14 +135,19 @@ prisma/migrations/
 - DECISION: Annual leave quotas set to 18 Paid days and 12 Sick days per employee per calendar year.
 - DECISION: Approved leaves automatically create `Attendance` records marked `status: "LEAVE"` for the entire date range.
 - FIX: Upgraded/pinned Prisma to v6 to maintain standard Prisma ORM schema syntax for `DATABASE_URL`.
-- FIX: Router groups `/admin` and `/employee` updated to `/admin-dashboard` and `/employee-dashboard` to eliminate Next.js duplicate route conflicts.
+- FIX: Route group folders `/(admin)` and `/(employee)` resolved to explicit paths `/admin/payroll` and `/employee/payroll` to prevent Next.js parallel route name collision.
 - FIX: `prisma generate` can fail with EPERM on Windows if `next dev` or `npx tsx` is running in background (locks DLL). Kill all Node processes first: `Get-Process -Name node | Stop-Process -Force`.
 - FIX: Next.js PostCSS & Tailwind v4 configured with `@tailwindcss/postcss` and theme tokens declared in `@theme` block in `app/globals.css`.
 - FIX: Wrapped all `useSearchParams()` calls in `<Suspense>` boundaries to ensure Next.js static prerendering compatibility.
 
 ## Current phase & next ticket:
+<<<<<<< HEAD
 - ✅ Phase 0, Phase 1, Phase 2, Phase 3, Phase 4, Phase 5 (T0.1–T5.4) complete & verified.
 - 🔜 Next: **Phase 6 — Payroll/Salary Management (T6.1–T6.3)**.
+=======
+- ✅ Phase 0, Phase 1, Phase 2, Phase 3, Phase 6 (T0.1–T3.4, T6.1–T6.3) complete & verified.
+- 🔜 Next: Merge `phase-6-payroll` into `main` after teammates complete Phase 4 & Phase 5.
+>>>>>>> phase-6-payroll
 
 ---
 
