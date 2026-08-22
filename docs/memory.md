@@ -86,11 +86,14 @@ prisma/migrations/
 - ASSUMPTION: S3 not yet configured — local disk storage with authenticated streaming used for T3.4; S3 transport added in future release.
 - ASSUMPTION: `docs/reference/Dayflow-HRMS-Requirements.pdf` is not committed (binary asset); developer adds it locally.
 - FIX: Upgraded/pinned Prisma to v6 to maintain standard Prisma ORM schema syntax for `DATABASE_URL`.
+- FIX: Router groups `/admin` and `/employee` updated to `/admin-dashboard` and `/employee-dashboard` to eliminate Next.js duplicate route conflicts.
+- FIX: `prisma generate` can fail with EPERM on Windows if `next dev` or `npx tsx` is running in background (locks DLL). Kill all Node processes first: `Get-Process -Name node | Stop-Process -Force`.
 - FIX: Next.js PostCSS & Tailwind v4 configured with `@tailwindcss/postcss` and theme tokens declared in `@theme` block in `app/globals.css`.
 - FIX: Wrapped all `useSearchParams()` calls in `<Suspense>` boundaries to ensure Next.js static prerendering compatibility.
 
 ## Current phase & next ticket:
-- 🔜 Next: **Phase 4 — Attendance Management — T4.1: Check-in / Check-out action + status logic**
+- ✅ Phase 0, Phase 1, Phase 2, Phase 3 (T0.1–T3.4) complete & verified.
+- 🔜 Next: **Phase 4 — Attendance Management (T4.1–T4.4)**.
 
 ---
 

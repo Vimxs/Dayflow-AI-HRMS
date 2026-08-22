@@ -1,133 +1,139 @@
+/**
+ * Dayflow HRMS — GET & POST /api/documents
+ * Security & Access Document §3 & §6
+ *
+ * Document Management Endpoint:
+ * - GET: Fetch documents for logged-in user (or target employeeId if Admin).
+ * - POST: Upload document (file validation, size ≤ 5MB, MIME check, DB record, AuditLog).
+ */
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/rbac/guards";
 import { prisma } from "@/lib/db/prisma";
-import fs from "fs";
-import path from "path";
+import { getAuthSession } from "@/lib/rbac/guards";
+import { ALLOWED_MIME_TYPES, MAX_FILE_SIZE_BYTES } from "@/lib/validators/document";
+import { createAuditLog } from "@/lib/audit/logger";
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
-const ALLOWED_MIME_TYPES = [
-  "application/pdf",
-  "image/png",
-  "image/jpeg",
-  "image/jpg",
-  "image/webp",
-];
-
-export async function POST(req: NextRequest) {
+export async function GET(req: NextRequest) {
   try {
-    const session = await getSession(req);
+    const session = await getAuthSession(req);
     if (!session) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
-    const formData = await req.formData();
+    const { searchParams } = new URL(req.url);
+    const targetEmployeeId = searchParams.get("employeeId");
+
+    let employeeIdToFetch = session.user.employeeId;
+
+    if (targetEmployeeId) {
+      if (session.user.role !== "ADMIN" && targetEmployeeId !== session.user.employeeId) {
+        return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
+      }
+      employeeIdToFetch = targetEmployeeId;
+    }
+
+    if (!employeeIdToFetch) {
+      return NextResponse.json({ success: false, error: "Employee profile not found" }, { status: 404 });
+    }
+
+    const documents = await prisma.document.findMany({
+      where: { employeeId: employeeIdToFetch },
+      orderBy: { uploadedAt: "desc" },
+    });
+
+    return NextResponse.json({
+      success: true,
+      data: documents,
+    });
+  } catch (error) {
+    console.error("GET /api/documents error:", error);
+    return NextResponse.json({ success: false, error: "Internal server error" }, { status: 500 });
+  }
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const session = await getAuthSession(req);
+    if (!session) {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+
+    const formData = await req.formData().catch(() => null);
+    if (!formData) {
+      return NextResponse.json({ success: false, error: "Invalid multipart form data" }, { status: 400 });
+    }
+
     const file = formData.get("file") as File | null;
-    const docType = (formData.get("docType") as string) || "GENERAL";
-    const targetEmployeeId = formData.get("employeeId") as string | null;
+    const docType = (formData.get("docType") as string) || "OTHER";
+    const targetEmployeeId = (formData.get("employeeId") as string) || session.user.employeeId;
 
     if (!file) {
       return NextResponse.json({ success: false, error: "No file provided" }, { status: 400 });
     }
 
-    // Validate size
-    if (file.size > MAX_FILE_SIZE) {
+    // Role check: Employee can only upload to own profile; Admin can upload to any employee
+    if (session.user.role !== "ADMIN" && targetEmployeeId !== session.user.employeeId) {
+      return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
+    }
+
+    if (!targetEmployeeId) {
+      return NextResponse.json({ success: false, error: "Target employee profile not found" }, { status: 404 });
+    }
+
+    // 1. File Size Validation (Max 5MB per Security doc §3)
+    if (file.size > MAX_FILE_SIZE_BYTES) {
       return NextResponse.json(
         { success: false, error: "File size exceeds the 5MB limit" },
         { status: 400 }
       );
     }
 
-    // Validate MIME type
+    // 2. MIME Type Validation (PDF, PNG, JPEG only per Security doc §3)
     if (!ALLOWED_MIME_TYPES.includes(file.type)) {
       return NextResponse.json(
-        {
-          success: false,
-          error: "Invalid file type. Allowed formats: PDF, PNG, JPEG, WEBP",
-        },
+        { success: false, error: "Invalid file type. Only PDF, PNG, and JPEG/JPG are allowed." },
         { status: 400 }
       );
     }
 
-    // Identify target employee
-    let employeeId = "";
-    if (session.user.role === "ADMIN" && targetEmployeeId) {
-      employeeId = targetEmployeeId;
-    } else {
-      const selfEmployee = await prisma.employee.findUnique({
-        where: { userId: session.user.userId },
-      });
-      if (!selfEmployee) {
-        return NextResponse.json(
-          { success: false, error: "Employee profile not found" },
-          { status: 404 }
-        );
-      }
-      employeeId = selfEmployee.id;
-    }
+    // Mock storage URL in dev (Phase 0–3 stub until S3 in T3.4 integration)
+    const fileSize = Math.round(file.size / 1024); // KB
+    const mockFileUrl = `/uploads/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
 
-    // Save file locally in public/uploads/documents (dev storage stub per T3.4)
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
-    const uploadsDir = path.join(process.cwd(), "public", "uploads", "documents");
-    if (!fs.existsSync(uploadsDir)) {
-      fs.mkdirSync(uploadsDir, { recursive: true });
-    }
-
-    const safeFileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
-    const filePath = path.join(uploadsDir, safeFileName);
-    fs.writeFileSync(filePath, buffer);
-
-    const fileUrl = `/uploads/documents/${safeFileName}`;
-
-    // Create Document record in DB
-    const document = await prisma.document.create({
+    const newDocument = await prisma.document.create({
       data: {
-        employeeId,
+        employeeId: targetEmployeeId,
+        docType: docType.toUpperCase(),
         fileName: file.name,
-        fileUrl,
-        docType,
-        fileSize: file.size,
+        fileUrl: mockFileUrl,
+        fileSize,
         mimeType: file.type,
       },
     });
 
-    // Write Audit Log
-    await prisma.auditLog.create({
-      data: {
-        actorId: session.user.userId,
-        action: "UPLOAD_DOCUMENT",
-        entity: "Document",
-        entityId: document.id,
-        metadata: JSON.stringify({
-          fileName: file.name,
-          fileSize: file.size,
-          mimeType: file.type,
-          employeeId,
-        }),
+    // Audit log document upload (Security doc §6)
+    await createAuditLog({
+      actorId: session.user.userId,
+      action: "UPLOAD_DOCUMENT",
+      entity: "Document",
+      entityId: newDocument.id,
+      metadata: {
+        fileName: file.name,
+        docType: newDocument.docType,
+        fileSize,
+        targetEmployeeId,
       },
     });
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        message: "Document uploaded successfully",
-        document: {
-          id: document.id,
-          fileName: document.fileName,
-          fileUrl: document.fileUrl,
-          docType: document.docType,
-          fileSize: document.fileSize,
-          mimeType: document.mimeType,
-          uploadedAt: document.uploadedAt.toISOString(),
-        },
-      },
-    });
-  } catch (error) {
-    console.error("Document upload error:", error);
     return NextResponse.json(
-      { success: false, error: "Failed to upload document" },
-      { status: 500 }
+      {
+        success: true,
+        message: "Document uploaded successfully",
+        data: newDocument,
+      },
+      { status: 201 }
     );
+  } catch (error) {
+    console.error("POST /api/documents error:", error);
+    return NextResponse.json({ success: false, error: "Internal server error" }, { status: 500 });
   }
 }

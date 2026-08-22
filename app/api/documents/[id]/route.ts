@@ -1,77 +1,59 @@
+﻿/**
+ * Dayflow HRMS — DELETE /api/documents/[id]
+ * Security & Access Document §3 & §6
+ *
+ * Delete Document Endpoint:
+ * - Restricted to document owner or Admin.
+ * - Records DELETE_DOCUMENT in AuditLog.
+ */
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/rbac/guards";
 import { prisma } from "@/lib/db/prisma";
-import fs from "fs";
-import path from "path";
+import { getAuthSession } from "@/lib/rbac/guards";
+import { createAuditLog } from "@/lib/audit/logger";
 
 export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await getSession(req);
+    const session = await getAuthSession(req);
     if (!session) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const { id } = await params;
-
-    const document = await prisma.document.findUnique({
-      where: { id },
-      include: { employee: true },
-    });
+    const document = await prisma.document.findUnique({ where: { id } });
 
     if (!document) {
       return NextResponse.json({ success: false, error: "Document not found" }, { status: 404 });
     }
 
-    // Role & ownership check
-    const isOwner = document.employee.userId === session.user.userId;
-    const isAdmin = session.user.role === "ADMIN";
-
-    if (!isOwner && !isAdmin) {
-      return NextResponse.json(
-        { success: false, error: "Forbidden: Access denied" },
-        { status: 403 }
-      );
+    // Role check: Only document owner or Admin can delete
+    if (session.user.role !== "ADMIN" && document.employeeId !== session.user.employeeId) {
+      return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
     }
 
-    // Try deleting physical file from disk
-    try {
-      const diskPath = path.join(process.cwd(), "public", document.fileUrl);
-      if (fs.existsSync(diskPath)) {
-        fs.unlinkSync(diskPath);
-      }
-    } catch (fsErr) {
-      console.warn("Could not delete physical file:", fsErr);
-    }
-
-    // Delete DB record
     await prisma.document.delete({ where: { id } });
 
-    // Write audit log
-    await prisma.auditLog.create({
-      data: {
-        actorId: session.user.userId,
-        action: "DELETE_DOCUMENT",
-        entity: "Document",
-        entityId: id,
-        metadata: JSON.stringify({
-          fileName: document.fileName,
-          employeeId: document.employeeId,
-        }),
+    // Audit log document deletion (Security doc §6)
+    await createAuditLog({
+      actorId: session.user.userId,
+      action: "DELETE_DOCUMENT",
+      entity: "Document",
+      entityId: id,
+      metadata: {
+        fileName: document.fileName,
+        docType: document.docType,
+        employeeId: document.employeeId,
       },
     });
 
     return NextResponse.json({
       success: true,
-      data: { message: "Document deleted successfully" },
+      message: "Document deleted successfully",
     });
   } catch (error) {
-    console.error("Delete document error:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to delete document" },
-      { status: 500 }
-    );
+    console.error("DELETE /api/documents/[id] error:", error);
+    return NextResponse.json({ success: false, error: "Internal server error" }, { status: 500 });
   }
 }
