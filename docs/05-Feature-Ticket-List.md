@@ -38,10 +38,10 @@
 **Acceptance:** Employees can only edit allowed fields; Admin edits are audit-logged.
 
 ## Phase 4 — Attendance Management
-- [ ] T4.1 Check-in / Check-out action + status logic
-- [ ] T4.2 Daily view (self, and Admin all-employee view)
-- [ ] T4.3 Weekly view + status legend (Present/Absent/Half-day/Leave)
-- [ ] T4.4 Admin filter by employee/date range
+- [x] T4.1 Check-in / Check-out action + status logic
+- [x] T4.2 Daily view (self, and Admin all-employee view)
+- [x] T4.3 Weekly view + status legend (Present/Absent/Half-day/Leave)
+- [x] T4.4 Admin filter by employee/date range
 
 **Acceptance:** Attendance scoping enforced per Security doc §2; correct status colors per Frontend Spec.
 
