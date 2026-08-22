@@ -35,7 +35,7 @@ async function sendMailStubOrReal(options: nodemailer.SendMailOptions) {
     console.warn("\n📧 [EMAIL STUB - SMTP not configured]");
     console.warn(`   To      : ${options.to}`);
     console.warn(`   Subject : ${options.subject}`);
-    console.warn(`   Text    : ${options.text?.substring(0, 100)}...`);
+    console.warn(`   Text    : ${String(options.text || "").substring(0, 100)}...`);
     console.warn("----------------------------------------\n");
     return true;
   }

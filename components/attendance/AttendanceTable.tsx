@@ -8,6 +8,7 @@ export interface AttendanceRecordItem {
   checkIn?: string | Date | null;
   checkOut?: string | Date | null;
   status: "PRESENT" | "ABSENT" | "HALF_DAY" | "LEAVE";
+  hoursWorked?: number | null;
   employee?: {
     id: string;
     employeeCode: string;
