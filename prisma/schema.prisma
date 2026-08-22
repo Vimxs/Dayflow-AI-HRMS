@@ -33,20 +33,22 @@ enum LeaveStatus {
 }
 
 model User {
-  id                  String               @id @default(cuid())
-  email               String               @unique
-  passwordHash        String               @map("password_hash")
-  role                Role                 @default(EMPLOYEE)
-  isVerified          Boolean              @default(false) @map("is_verified")
-  createdAt           DateTime             @default(now()) @map("created_at")
-  updatedAt           DateTime             @updatedAt @map("updated_at")
+  id               String       @id @default(cuid())
+  email            String       @unique
+  passwordHash     String       @map("password_hash")
+  role             Role         @default(EMPLOYEE)
+  isVerified       Boolean      @default(false) @map("is_verified")
+  verifyToken      String?      @map("verify_token")
+  verifyTokenExp   DateTime?    @map("verify_token_exp")
+  resetToken       String?      @map("reset_token")
+  resetTokenExp    DateTime?    @map("reset_token_exp")
+  refreshTokenHash String?      @map("refresh_token_hash")
+  createdAt        DateTime     @default(now()) @map("created_at")
+  updatedAt        DateTime     @updatedAt @map("updated_at")
 
-  employee            Employee?
-  notifications       Notification[]
-  auditLogs           AuditLog[]
-  verificationTokens  VerificationToken[]
-  passwordResetTokens PasswordResetToken[]
-  refreshTokens       RefreshToken[]
+  employee         Employee?
+  notifications    Notification[]
+  auditLogs        AuditLog[]
 
   @@map("users")
 }
@@ -169,39 +171,3 @@ model AuditLog {
   @@map("audit_logs")
 }
 
-model VerificationToken {
-  id        String   @id @default(cuid())
-  userId    String   @map("user_id")
-  token     String   @unique
-  expiresAt DateTime @map("expires_at")
-  createdAt DateTime @default(now()) @map("created_at")
-
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("verification_tokens")
-}
-
-model PasswordResetToken {
-  id        String   @id @default(cuid())
-  userId    String   @map("user_id")
-  token     String   @unique
-  expiresAt DateTime @map("expires_at")
-  createdAt DateTime @default(now()) @map("created_at")
-
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("password_reset_tokens")
-}
-
-model RefreshToken {
-  id        String   @id @default(cuid())
-  userId    String   @map("user_id")
-  token     String   @unique
-  isRevoked Boolean  @default(false) @map("is_revoked")
-  expiresAt DateTime @map("expires_at")
-  createdAt DateTime @default(now()) @map("created_at")
-
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("refresh_tokens")
-}

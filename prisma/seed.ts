@@ -14,9 +14,6 @@ async function main() {
   await prisma.payroll.deleteMany();
   await prisma.leaveRequest.deleteMany();
   await prisma.attendance.deleteMany();
-  await prisma.verificationToken.deleteMany();
-  await prisma.passwordResetToken.deleteMany();
-  await prisma.refreshToken.deleteMany();
   await prisma.employee.deleteMany();
   await prisma.user.deleteMany();
 

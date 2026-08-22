@@ -56,14 +56,11 @@ export function verifyRefreshToken(token: string): { userId: string } | null {
  */
 export async function createAndStoreRefreshToken(userId: string): Promise<string> {
   const token = crypto.randomBytes(40).toString("hex");
-  const expiresAt = new Date();
-  expiresAt.setDate(expiresAt.getDate() + REFRESH_TOKEN_DAYS);
 
-  await prisma.refreshToken.create({
+  await prisma.user.update({
+    where: { id: userId },
     data: {
-      userId,
-      token,
-      expiresAt,
+      refreshTokenHash: token,
     },
   });
 
@@ -71,47 +68,32 @@ export async function createAndStoreRefreshToken(userId: string): Promise<string
 }
 
 /**
- * Validates and rotates an existing refresh token (implements reuse detection)
+ * Validates and rotates an existing refresh token
  */
 export async function rotateRefreshToken(
   oldToken: string
 ): Promise<{ newRefreshToken: string; userId: string } | null> {
-  const storedToken = await prisma.refreshToken.findUnique({
-    where: { token: oldToken },
+  const user = await prisma.user.findFirst({
+    where: { refreshTokenHash: oldToken },
   });
 
-  if (!storedToken) {
+  if (!user) {
     return null;
   }
-
-  // Reuse detection: if token was already revoked, revoke all tokens for this user immediately
-  if (storedToken.isRevoked || storedToken.expiresAt < new Date()) {
-    await prisma.refreshToken.updateMany({
-      where: { userId: storedToken.userId },
-      data: { isRevoked: true },
-    });
-    return null;
-  }
-
-  // Revoke old token
-  await prisma.refreshToken.update({
-    where: { id: storedToken.id },
-    data: { isRevoked: true },
-  });
 
   // Issue new rotated refresh token
-  const newRefreshToken = await createAndStoreRefreshToken(storedToken.userId);
+  const newRefreshToken = await createAndStoreRefreshToken(user.id);
 
   return {
     newRefreshToken,
-    userId: storedToken.userId,
+    userId: user.id,
   };
 }
 
 export async function revokeRefreshToken(token: string): Promise<void> {
-  await prisma.refreshToken.updateMany({
-    where: { token },
-    data: { isRevoked: true },
+  await prisma.user.updateMany({
+    where: { refreshTokenHash: token },
+    data: { refreshTokenHash: null },
   });
 }
 

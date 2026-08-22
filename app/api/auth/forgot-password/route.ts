@@ -36,21 +36,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(genericSuccessResponse);
     }
 
-    // Invalidate existing reset tokens for this user
-    await prisma.passwordResetToken.deleteMany({
-      where: { userId: user.id },
-    });
-
     // Generate 15-minute reset token
     const token = crypto.randomBytes(32).toString("hex");
-    const expiresAt = new Date();
-    expiresAt.setMinutes(expiresAt.getMinutes() + 15);
+    const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
 
-    await prisma.passwordResetToken.create({
+    await prisma.user.update({
+      where: { id: user.id },
       data: {
-        userId: user.id,
-        token,
-        expiresAt,
+        resetToken: token,
+        resetTokenExp: expiresAt,
       },
     });
 

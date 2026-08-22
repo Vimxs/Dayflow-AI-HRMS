@@ -22,13 +22,12 @@ export async function POST(req: NextRequest) {
 
     const { token, password } = validationResult.data;
 
-    // Look up token in DB
-    const resetRecord = await prisma.passwordResetToken.findUnique({
-      where: { token },
-      include: { user: true },
+    // Look up user by resetToken
+    const user = await prisma.user.findFirst({
+      where: { resetToken: token },
     });
 
-    if (!resetRecord) {
+    if (!user) {
       return NextResponse.json(
         {
           success: false,
@@ -38,9 +37,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (resetRecord.expiresAt < new Date()) {
-      await prisma.passwordResetToken.delete({
-        where: { id: resetRecord.id },
+    if (user.resetTokenExp && user.resetTokenExp < new Date()) {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { resetToken: null, resetTokenExp: null },
       });
 
       return NextResponse.json(
@@ -56,28 +56,24 @@ export async function POST(req: NextRequest) {
     // Hash new password
     const newPasswordHash = await hashPassword(password);
 
-    // Update password, delete token, and revoke active sessions for security
-    await prisma.$transaction([
-      prisma.user.update({
-        where: { id: resetRecord.userId },
-        data: { passwordHash: newPasswordHash },
-      }),
-      prisma.passwordResetToken.delete({
-        where: { id: resetRecord.id },
-      }),
-      prisma.refreshToken.updateMany({
-        where: { userId: resetRecord.userId },
-        data: { isRevoked: true },
-      }),
-    ]);
+    // Update password, clear token, and clear refresh token hash for security
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        passwordHash: newPasswordHash,
+        resetToken: null,
+        resetTokenExp: null,
+        refreshTokenHash: null,
+      },
+    });
 
     // Audit log
     await createAuditLog({
-      actorId: resetRecord.userId,
-      action: "PASSWORD_RESET_SUCCESS",
+      actorId: user.id,
+      action: "PASSWORD_RESET",
       entity: "User",
-      entityId: resetRecord.userId,
-      metadata: { email: resetRecord.user.email },
+      entityId: user.id,
+      metadata: { email: user.email },
     });
 
     const response = NextResponse.json({

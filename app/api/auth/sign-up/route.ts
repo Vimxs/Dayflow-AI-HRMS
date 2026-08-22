@@ -104,15 +104,8 @@ export async function POST(request: NextRequest) {
           passwordHash,
           role: Role.EMPLOYEE, // Strictly forced server-side
           isVerified: false,
-        },
-      });
-
-      // Store verification token in separate table
-      await tx.verificationToken.create({
-        data: {
-          userId: newUser.id,
-          token: verifyToken,
-          expiresAt,
+          verifyToken,
+          verifyTokenExp: expiresAt,
         },
       });
 

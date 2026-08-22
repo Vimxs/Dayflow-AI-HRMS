@@ -42,21 +42,15 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Remove older tokens
-    await prisma.verificationToken.deleteMany({
-      where: { userId: user.id },
-    });
-
     // Generate new token
     const token = crypto.randomBytes(32).toString("hex");
-    const expiresAt = new Date();
-    expiresAt.setHours(expiresAt.getHours() + 24);
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
-    await prisma.verificationToken.create({
+    await prisma.user.update({
+      where: { id: user.id },
       data: {
-        userId: user.id,
-        token,
-        expiresAt,
+        verifyToken: token,
+        verifyTokenExp: expiresAt,
       },
     });
 

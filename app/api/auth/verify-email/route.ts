@@ -20,13 +20,12 @@ export async function POST(req: NextRequest) {
 
     const { token } = validationResult.data;
 
-    // Find token in database
-    const verificationRecord = await prisma.verificationToken.findUnique({
-      where: { token },
-      include: { user: true },
+    // Find user with this verifyToken
+    const user = await prisma.user.findFirst({
+      where: { verifyToken: token },
     });
 
-    if (!verificationRecord) {
+    if (!user) {
       return NextResponse.json(
         {
           success: false,
@@ -36,10 +35,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (verificationRecord.expiresAt < new Date()) {
-      // Token expired — delete it
-      await prisma.verificationToken.delete({
-        where: { id: verificationRecord.id },
+    if (user.verifyTokenExp && user.verifyTokenExp < new Date()) {
+      // Token expired — clear it
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { verifyToken: null, verifyTokenExp: null },
       });
 
       return NextResponse.json(
@@ -47,30 +47,29 @@ export async function POST(req: NextRequest) {
           success: false,
           error: "This verification link has expired. Please request a new verification email.",
           expired: true,
-          email: verificationRecord.user.email,
+          email: user.email,
         },
         { status: 400 }
       );
     }
 
-    // Mark user as verified and delete used token
-    await prisma.$transaction([
-      prisma.user.update({
-        where: { id: verificationRecord.userId },
-        data: { isVerified: true },
-      }),
-      prisma.verificationToken.delete({
-        where: { id: verificationRecord.id },
-      }),
-    ]);
+    // Mark user as verified and clear token
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        isVerified: true,
+        verifyToken: null,
+        verifyTokenExp: null,
+      },
+    });
 
     // Audit log
     await createAuditLog({
-      actorId: verificationRecord.userId,
+      actorId: user.id,
       action: "EMAIL_VERIFIED",
       entity: "User",
-      entityId: verificationRecord.userId,
-      metadata: { email: verificationRecord.user.email },
+      entityId: user.id,
+      metadata: { email: user.email },
     });
 
     return NextResponse.json({
