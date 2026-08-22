@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: #5B4FE9;
+    --color-primary-soft: #EDEBFF;
+    --color-accent-coral: #FF7A59;
+    --color-accent-teal: #12B8A6;
+    --color-accent-amber: #F5A623;
+    --color-danger: #E5484D;
+    --color-ink: #1A1B25;
+    --color-muted: #6B7280;
+    --color-canvas: #FBFAFF;
+    --color-surface: #FFFFFF;
+    --color-border: #E7E5F5;
+
+    --font-inter: 'Inter', sans-serif;
+    --font-sora: 'Sora', sans-serif;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-inter);
+    background-image: 
+      radial-gradient(circle at 5% 15%, rgba(237, 235, 255, 0.8) 0%, rgba(251, 250, 255, 0.4) 40%),
+      radial-gradient(circle at 95% 85%, rgba(255, 240, 236, 0.6) 0%, rgba(251, 250, 255, 0.4) 40%),
+      radial-gradient(circle at 50% 50%, rgba(245, 243, 255, 0.4) 0%, rgba(251, 250, 255, 1) 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-sora);
+    font-weight: 600;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(231, 229, 245, 0.8);
+    box-shadow: 0 4px 24px rgba(91, 79, 233, 0.08);
+  }
+
+  .glass-card {
+    background: #FFFFFF;
+    border: 1px solid #E7E5F5;
+    box-shadow: 0 4px 24px rgba(91, 79, 233, 0.06);
+    border-radius: 12px;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .glass-card:hover {
+    box-shadow: 0 8px 32px rgba(91, 79, 233, 0.12);
+    border-color: #D5D1EB;
+  }
+
+  .badge-present {
+    @apply bg-[#E6F8F5] text-[#0D9488] border border-[#B2ECE4];
+  }
+
+  .badge-absent {
+    @apply bg-[#FDECE8] text-[#E5484D] border border-[#F9C9C2];
+  }
+
+  .badge-half-day {
+    @apply bg-[#FEF6E9] text-[#D97706] border border-[#FDE2B3];
+  }
+
+  .badge-leave {
+    @apply bg-[#EDEBFF] text-[#5B4FE9] border border-[#D5D1EB];
+  }
+}
+
+/* Custom modern scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D5D1EB;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #5B4FE9;
+}

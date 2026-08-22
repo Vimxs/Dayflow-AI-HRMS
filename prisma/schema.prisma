@@ -1,0 +1,205 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  EMPLOYEE
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  HALF_DAY
+  LEAVE
+}
+
+enum LeaveType {
+  PAID
+  SICK
+  UNPAID
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id                  String               @id @default(cuid())
+  email               String               @unique
+  passwordHash        String               @map("password_hash")
+  role                Role                 @default(EMPLOYEE)
+  isVerified          Boolean              @default(false) @map("is_verified")
+  createdAt           DateTime             @default(now()) @map("created_at")
+  updatedAt           DateTime             @updatedAt @map("updated_at")
+
+  employee            Employee?
+  notifications       Notification[]
+  auditLogs           AuditLog[]
+  verificationTokens  VerificationToken[]
+  passwordResetTokens PasswordResetToken[]
+  refreshTokens       RefreshToken[]
+
+  @@map("users")
+}
+
+model Employee {
+  id                String         @id @default(cuid())
+  userId            String         @unique @map("user_id")
+  employeeCode      String         @unique @map("employee_code")
+  name              String
+  phone             String?
+  address           String?
+  jobTitle          String         @map("job_title")
+  department        String
+  dateOfJoining     DateTime       @map("date_of_joining")
+  profilePictureUrl String?        @map("profile_picture_url")
+  createdAt         DateTime       @default(now()) @map("created_at")
+  updatedAt         DateTime       @updatedAt @map("updated_at")
+
+  user              User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  attendances       Attendance[]
+  leaveRequests     LeaveRequest[] @relation("EmployeeLeaves")
+  reviewedLeaves    LeaveRequest[] @relation("AdminReviewedLeaves")
+  payroll           Payroll?
+  documents         Document[]
+
+  @@map("employees")
+}
+
+model Attendance {
+  id         String           @id @default(cuid())
+  employeeId String           @map("employee_id")
+  date       DateTime         @db.Date
+  checkIn    DateTime?        @map("check_in")
+  checkOut   DateTime?        @map("check_out")
+  status     AttendanceStatus @default(PRESENT)
+  createdAt  DateTime         @default(now()) @map("created_at")
+  updatedAt  DateTime         @updatedAt @map("updated_at")
+
+  employee   Employee         @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@unique([employeeId, date])
+  @@map("attendance")
+}
+
+model LeaveRequest {
+  id            String      @id @default(cuid())
+  employeeId    String      @map("employee_id")
+  leaveType     LeaveType   @map("leave_type")
+  startDate     DateTime    @map("start_date") @db.Date
+  endDate       DateTime    @map("end_date") @db.Date
+  remarks       String?
+  status        LeaveStatus @default(PENDING)
+  reviewedById  String?     @map("reviewed_by_id")
+  reviewComment String?     @map("review_comment")
+  reviewedAt    DateTime?   @map("reviewed_at")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+
+  employee      Employee    @relation("EmployeeLeaves", fields: [employeeId], references: [id], onDelete: Cascade)
+  reviewedBy    Employee?   @relation("AdminReviewedLeaves", fields: [reviewedById], references: [id])
+
+  @@map("leave_requests")
+}
+
+model Payroll {
+  id            String   @id @default(cuid())
+  employeeId    String   @unique @map("employee_id")
+  baseSalary    Float    @map("base_salary")
+  allowances    Float    @default(0)
+  deductions    Float    @default(0)
+  effectiveFrom DateTime @map("effective_from") @db.Date
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  employee      Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@map("payroll")
+}
+
+model Document {
+  id         String   @id @default(cuid())
+  employeeId String   @map("employee_id")
+  fileName   String   @map("file_name")
+  fileUrl    String   @map("file_url")
+  docType    String   @map("doc_type")
+  fileSize   Int      @map("file_size")
+  mimeType   String   @map("mime_type")
+  uploadedAt DateTime @default(now()) @map("uploaded_at")
+
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@map("documents")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  message   String
+  type      String   @default("GENERAL")
+  isRead    Boolean  @default(false) @map("is_read")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?  @map("actor_id")
+  action    String
+  entity    String
+  entityId  String?  @map("entity_id")
+  metadata  String?  @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+
+  actor     User?    @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@map("audit_logs")
+}
+
+model VerificationToken {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("verification_tokens")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("password_reset_tokens")
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  token     String   @unique
+  isRevoked Boolean  @default(false) @map("is_revoked")
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
