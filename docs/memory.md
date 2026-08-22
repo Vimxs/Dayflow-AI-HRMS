@@ -143,9 +143,15 @@ prisma/migrations/
 - FIX: Next.js PostCSS & Tailwind v4 configured with `@tailwindcss/postcss` and theme tokens declared in `@theme` block in `app/globals.css`.
 - FIX: Wrapped all `useSearchParams()` calls in `<Suspense>` boundaries to ensure Next.js static prerendering compatibility.
 
+## Phase 8 — Hardening & Polish (DONE)
+- **T8.1** ✅ — Full RBAC audit pass across every endpoint.
+- **T8.2** ✅ — Rate limiting on auth routes using in-memory token bucket.
+- **T8.3 & T8.4** ✅ — Accessibility & Responsive QA pass.
+- **T8.5** ✅ — E2E test suite setup (Playwright) with basic auth and attendance flows.
+
 ## Current phase & next ticket:
-- ✅ Phase 0 to Phase 7 complete & verified.
-- 🔜 Next: **Phase 8 — Performance & Polish**.
+- ✅ **Version 1.0 Complete!** All Phases (Phase 0 to Phase 8) are fully built and verified.
+- 🔜 Next: Setup CI/CD, production deployment, or future backlog enhancements.
 
 ---
 

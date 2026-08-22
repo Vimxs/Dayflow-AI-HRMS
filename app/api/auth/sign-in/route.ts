@@ -11,23 +11,32 @@ import {
   TokenPayload,
 } from "@/lib/auth/jwt";
 import { createAuditLog } from "@/lib/audit/logger";
-
+import { checkRateLimit } from "@/lib/rate-limit";
 export async function POST(req: NextRequest) {
   try {
+    const ip = req.headers.get("x-forwarded-for") || req.ip || "127.0.0.1";
+    // We can't use email before parsing, so rate limit purely by IP for the entire sign-in endpoint for now,
+    // or rate limit by IP + email if we parse first. Let's parse first.
     const body = await req.json().catch(() => ({}));
     const validationResult = signInSchema.safeParse(body);
-
+    
     if (!validationResult.success) {
       return NextResponse.json(
-        {
-          success: false,
-          error: "Invalid email or password format.",
-        },
+        { success: false, error: "Invalid email or password format." },
         { status: 400 }
       );
     }
-
+    
     const { email, password } = validationResult.data;
+    
+    const rateLimit = checkRateLimit(`signin:${ip}:${email}`, 5, 10 * 60 * 1000);
+    
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        { success: false, error: "Too many requests. Please try again later." },
+        { status: 429, headers: { "Retry-After": rateLimit.resetInSeconds.toString() } }
+      );
+    }
 
     // Look up user
     const user = await prisma.user.findUnique({

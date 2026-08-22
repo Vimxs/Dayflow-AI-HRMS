@@ -21,7 +21,7 @@ export function AuthCard({
     <div className="min-h-screen flex flex-col justify-center items-center px-4 py-12">
       {/* Brand Header */}
       <div className="text-center mb-8">
-        <Link href="/" className="inline-flex items-center gap-3 group">
+        <Link href="/" className="inline-flex items-center gap-3 group" aria-label="Go to Dayflow Homepage">
           <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center text-white font-heading font-bold text-2xl shadow-lg shadow-primary/30 group-hover:scale-105 transition-transform">
             D
           </div>

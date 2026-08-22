@@ -3,9 +3,19 @@ import { prisma } from "@/lib/db/prisma";
 import { forgotPasswordSchema } from "@/lib/validators/auth";
 import { sendPasswordResetEmail } from "@/lib/email/mailer";
 import crypto from "crypto";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
   try {
+    const ip = req.headers.get("x-forwarded-for") || req.ip || "127.0.0.1";
+    const rateLimit = checkRateLimit(`forgot-password:${ip}`, 3, 15 * 60 * 1000); // 3 requests per 15m
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        { success: false, error: "Too many requests. Please try again later." },
+        { status: 429, headers: { "Retry-After": rateLimit.resetInSeconds.toString() } }
+      );
+    }
+
     const body = await req.json().catch(() => ({}));
     const validationResult = forgotPasswordSchema.safeParse(body);
 

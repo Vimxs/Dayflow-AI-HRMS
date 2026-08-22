@@ -61,19 +61,19 @@
 **Acceptance:** Salary data never exposed in list endpoints; only detail view, role-gated.
 
 ## Phase 7 — Notifications, Analytics & Reports
-- [ ] T7.1 Email notification integration (leave status, approvals pending)
-- [ ] T7.2 Attendance analytics chart (weekly/monthly trend)
-- [ ] T7.3 Leave-type distribution chart
-- [ ] T7.4 Exportable reports (attendance report, salary slip — PDF/CSV)
+- [x] T7.1 Email notification integration (leave status, approvals pending)
+- [x] T7.2 Attendance analytics chart (weekly/monthly trend)
+- [x] T7.3 Leave-type distribution chart
+- [x] T7.4 Exportable reports (attendance report, salary slip — PDF/CSV)
 
 **Acceptance:** Reports match underlying DB data exactly; exports role-gated.
 
 ## Phase 8 — Hardening & Polish
-- [ ] T8.1 Full RBAC audit pass across every endpoint
-- [ ] T8.2 Rate limiting on auth routes
-- [ ] T8.3 Accessibility pass (contrast, keyboard nav, labels)
-- [ ] T8.4 Responsive QA pass (mobile/tablet/desktop)
-- [ ] T8.5 E2E test suite (Playwright) for critical flows: sign-up→verify→login, apply leave→approve, check-in/out
+- [x] T8.1 Full RBAC audit pass across every endpoint
+- [x] T8.2 Rate limiting on auth routes
+- [x] T8.3 Accessibility pass (contrast, keyboard nav, labels)
+- [x] T8.4 Responsive QA pass (mobile/tablet/desktop)
+- [x] T8.5 E2E test suite (Playwright) for critical flows: sign-up→verify→login, apply leave→approve, check-in/out
 
 **Acceptance:** All Security & Access Document requirements verified; Lighthouse accessibility score ≥ 90.
 

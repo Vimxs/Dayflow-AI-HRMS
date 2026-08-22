@@ -4,9 +4,19 @@ import { resetPasswordSchema } from "@/lib/validators/auth";
 import { hashPassword } from "@/lib/auth/password";
 import { createAuditLog } from "@/lib/audit/logger";
 import { ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME } from "@/lib/auth/jwt";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
   try {
+    const ip = req.headers.get("x-forwarded-for") || req.ip || "127.0.0.1";
+    const rateLimit = checkRateLimit(`reset-password:${ip}`, 3, 15 * 60 * 1000); // 3 requests per 15m
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        { success: false, error: "Too many requests. Please try again later." },
+        { status: 429, headers: { "Retry-After": rateLimit.resetInSeconds.toString() } }
+      );
+    }
+
     const body = await req.json().catch(() => ({}));
     const validationResult = resetPasswordSchema.safeParse(body);
 
