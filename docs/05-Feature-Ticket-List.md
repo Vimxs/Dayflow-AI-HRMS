@@ -12,7 +12,7 @@
 **Acceptance:** App boots locally, empty themed shell renders, DB connects, migrations run.
 
 ## Phase 1 — Authentication & Authorization
-- [ ] T1.1 Sign-up API + form (Employee ID, Email, Password, Role)
+- [x] T1.1 Sign-up API + form (Employee ID, Email, Password, Role)
 - [ ] T1.2 Password hashing (bcrypt/argon2) + validation rules
 - [ ] T1.3 Email verification flow (token generation + verify endpoint + email send)
 - [ ] T1.4 Sign-in API + form + JWT issuance (access + refresh)

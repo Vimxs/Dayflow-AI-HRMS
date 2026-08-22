@@ -1,95 +1,92 @@
-# Dayflow AI
+# Dayflow — Human Resource Management System (HRMS)
 
-## AI-Powered Human Resource Management System
+> "Every workday, perfectly aligned."
 
-Dayflow AI is an intelligent Human Resource Management System that combines essential HR operations with AI-powered workforce insights.
-
-Unlike traditional HRMS platforms that primarily store and display data, Dayflow AI uses AI to analyze attendance and leave patterns, identify meaningful trends, and provide useful insights for HR management.
+Dayflow is a modern, full-stack Human Resource Management System designed for agile organizations to streamline core HR operations: digital onboarding, profile management, live attendance tracking, leave approval workflows, and transparent payroll visibility.
 
 ---
 
-## Problem Statement
-
-HR teams manage large amounts of employee, attendance, and leave data. While traditional HRMS platforms store this information, identifying repeated lateness, unusual absences, pending requests, and other important patterns often requires significant manual review.
-
-Dayflow AI aims to simplify this process by combining HR management with intelligent data analysis.
-
----
-
-## Our Solution
-
-Dayflow AI provides a unified platform for:
-
-- Employee management
-- Check-in and check-out
-- Attendance tracking
-- Leave application and approval
-- Admin and HR dashboards
-- AI-powered workforce insights
-
-The system analyzes workforce data to identify patterns and generate clear, understandable insights.
+##  Design System — Modern Painted Theme
+- **Primary Indigo-Violet:** `#5B4FE9`
+- **Soft Accent Coral:** `#FF7A59`
+- **Teal (Present/Approved):** `#12B8A6`
+- **Amber (Half-Day/Warning):** `#F5A623`
+- **Danger (Absent/Rejected):** `#E5484D`
+- **Canvas Wash & Glassmorphism:** Soft multi-stop radial gradient canvas with crisp glass cards.
+- **Typography:** `Sora` (Headings) & `Inter` (Body).
 
 ---
 
-## What Makes Dayflow AI Different?
-
-Traditional HRMS platforms primarily focus on managing and displaying employee data.
-
-Dayflow AI goes a step further by integrating an AI-powered analysis layer that can identify patterns such as:
-
-- Repeated lateness
-- Frequent absences
-- Missing check-outs
-- Pending leave requests
-- Attendance trends
-
-The system is designed to transform raw workforce data into meaningful and explainable insights.
-
-**Data → Analysis → Insights → Better Decision-Making**
+##  Tech Stack
+- **Framework:** Next.js 14+ (App Router) + TypeScript
+- **Styling:** Tailwind CSS + Custom Design System Tokens
+- **Database & ORM:** PostgreSQL 16 + Prisma ORM
+- **Authentication & Security:** JWT (Access + httpOnly Refresh) + bcryptjs password hashing + RBAC Middleware
+- **Validation:** Zod schemas for all mutating endpoints
+- **Icons & Charts:** Lucide React & Recharts
 
 ---
 
-## Key Features
+##  Getting Started
 
-### Employee Portal
+### 1. Prerequisites
+- Node.js 18+ / 20+
+- PostgreSQL database instance
 
-- Check in and check out
-- View attendance history
-- Apply for leave
-- Track leave status
+### 2. Setup Environment
+```bash
+cp .env.example .env
+```
 
-### Admin / HR Portal
+### 3. Install Dependencies
+```bash
+npm install
+```
 
-- Monitor employees and attendance
-- Manage leave requests
-- Approve or reject requests
-- View workforce analytics
+### 4. Database Migration & Seed
+```bash
+npx prisma db push
+npm run prisma:seed
+```
 
-### Dayflow AI Insights
-
-- Workforce summaries
-- Attendance pattern analysis
-- Repeated lateness detection
-- Absence and missing check-out analysis
-- AI-generated insights
-
----
-
-## Team
-
-Team Member 
-
- Vashundhara Raj Mani,
- Shubham Singh Chauhan,
- Vimla Pandey
----
-
-## Vision
-
-> Dayflow AI combines intelligent technology with HR management to make workforce data easier to analyze, understand, and manage.
+### 5. Run Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## Project Status
+##  Seeded Demo Accounts
+| Role | Email | Password | Details |
+|---|---|---|---|
+| **Admin / HR** | `admin@dayflow.com` | `Admin@123` | Anita Roy (HR Lead) |
+| **Employee** | `rahul@dayflow.com` | `Rahul@123` | Rahul Sharma (Senior Engineer) |
+| **Employee** | `priya@dayflow.com` | `Priya@123` | Priya Patel (Product Designer) |
 
-Currently under active development for the hackathon.
+---
+
+## Repository Structure
+```
+dayflow/
+├── docs/
+│   ├── 01-Product-Requirements-Document.md
+│   ├── 02-Technical-Architecture-Document.md
+│   ├── 03-Security-And-Access-Document.md
+│   ├── 04-Frontend-Specification-Document.md
+│   ├── 05-Feature-Ticket-List.md
+│   ├── 06-Rules.md
+│   ├── memory.md
+│   └── reference/
+│       └── Dayflow-HRMS-Requirements.pdf
+├── app/
+├── components/
+├── lib/
+├── prisma/
+├── tests/
+├── .env
+├── .env.example
+├── .gitignore
+├── package.json
+└── README.md
+```
